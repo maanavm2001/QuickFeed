@@ -10,7 +10,10 @@ let studentSchema = new Schema({
   username: {
     type: String
   },
-  password: {
+  salt: {
+    type: String
+  },
+  hash: {
     type: String
   },
   classes: [{
@@ -25,7 +28,13 @@ let teacherSchema = new Schema({
     username: {
       type: String
     },
-    password: {
+    email: {
+      type: String
+    },
+    salt: {
+      type: String
+    },
+    hash: {
       type: String
     },
     classes: [{
@@ -61,9 +70,12 @@ let classSchema = new Schema({
     messages: [{
         type: Schema.Types.ObjectId, ref: 'Message' 
     }],
-    classlength : {
+    classlength: {
         type: Number
     },
+    active: {
+        type: Boolean
+    }
 });
 
 
