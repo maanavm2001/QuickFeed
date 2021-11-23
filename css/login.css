@@ -1,0 +1,204 @@
+* {
+  margin: 0px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+header {
+  position: absolute;
+  top: 0px;
+  width: 100vw;
+  height: 15vh;
+  background-color: #564787;
+}
+
+body{
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+#particles-js{
+  position: absolute;
+  top:0;
+  height: 100vh;
+  width: 100vw;
+  background: white;
+}
+
+#logo {
+  display: inline;
+  float: left;
+  padding-top: 1vh;
+  padding-left: 4vh;
+  font-weight: 800;
+  font-size: 10vh;
+  color: white;
+}
+
+#nav-bar {
+  display: inline;
+  float: right;
+  padding-top: 5vh;
+  padding-right: 1vw;
+  font-weight: 600;
+}
+
+.nav-items {
+  display: inline;
+  position: relative;
+  font-size: 3vh;
+  margin: 2vw;
+  color: white;
+}
+
+.nav-items:after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: white;
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
+}
+
+.nav-items:hover:after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.outer-box {
+  display: block;
+  position: relative;
+  top: 25vh;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #E26D5C;
+  width: 80vw;
+  height: 60vh;
+  border-radius: 2vh;
+}
+
+.outer-text {
+  float: right;
+  padding: 4vh;
+  width: 50%;
+  color: white;
+}
+
+.outer-text h1 {
+  font-size: 7.5vh;
+  font-weight: 625;
+  margin-bottom: 5vh;
+}
+
+.outer-text h3 {
+  font-size: 3.5vh;
+  font-weight: 400;
+  margin-top: 2vh;
+}
+
+#signup{
+  display:absolute;
+  bottom: 0;
+  font-weight: 550;
+}
+
+#signup a{
+  text-decoration: underline;
+}
+
+.inner-box {
+  display: block;
+  position: absolute;
+  top: -6.5vh;
+  left: 3.5vh;
+  background-color: white;
+  width: 43%;
+  height: 77vh;
+  box-shadow: 2px 2px 25px black;
+  border-radius: 5vh;
+}
+
+label, input, button {
+  display: block;
+  position: relative;
+  left: 15%;
+}
+
+.inner-box h2 {
+  text-align: center;
+  font-size: 7vh;
+  font-weight: 725;
+  position: relative;
+  top: 2vh;
+}
+
+.inner-box input {
+  font-size: 2.75vh;
+  font-weight: 500;
+  padding-top: 1vh;
+  padding-bottom: 1vh;
+  padding-left: 1vh;
+  width: 60%;
+  border: 1px solid;
+  border-radius: 0.75vh;
+}
+
+.inner-box label {
+  font-size: 3.25vh;
+  font-weight: 500;
+  margin-top: 1.5vh;
+  margin-bottom: 0.5vh;
+}
+
+input[type = "checkbox"]{
+  width: 4vw;
+  height: 2vw;
+  -webkit-appearance: none;
+  background: white;
+  outline: none;
+  border-radius: 1vw;
+  transition: .5s;
+}
+input[type = "checkbox"]:before{
+ content: '';
+ position: absolute;
+ width: 2vw;
+ height: 2vw;
+ border-radius: 2vw;
+ top: -1px;
+ left: 0;
+ transform: scale(1.1);
+ transition: .5s;
+ background: black;
+}
+
+input:checked[type = "checkbox"]:before{
+ left: 2vw;
+}
+
+button {
+  display: absolute;
+  left: 18%;
+  font-size: 3vh;
+  font-weight: 600;
+  padding-top: 2.5vh;
+  border-style: none;
+  padding-bottom: 3vh;
+  padding-left: 8.75vw;
+  padding-right: 8.75vw;
+  margin-top: 3vh;
+  border-radius: 2vw;
+}
+
+button:hover {
+  color: white;
+  background-color: black;
+}
