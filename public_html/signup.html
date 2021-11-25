@@ -5,6 +5,8 @@
   <meta charset="utf-8">
   <title>QuickFeed-Sign Up</title>
   <link rel="stylesheet" href="css/signup.css">
+  <script src="js/jquery.js"></script>
+  <script src="js/code.js"></script>
 </head>
 
 <body>
@@ -34,7 +36,7 @@
         <input type="password" id="pass" required>
         <label for="instructor">Sign up as an Instructor?</label>
         <input type="checkbox" id="instructor" name="instructor" required>
-        <button type="button" id="Submit" class="contact-det" id="send">Sign Up</button>
+        <button type="button" id="Submit" onclick="createAccount();" class="contact-det" id="send">Sign Up</button>
         <h6> Already have an account? <a href=login.html> Login </a></h6>
       </span>
     </div>

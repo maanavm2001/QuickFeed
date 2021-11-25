@@ -2,26 +2,26 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-
-let studentSchema = new Schema({
-  name: {
-    type: String
-  },
-  username: {
-    type: String
-  },
-  salt: {
-    type: String
-  },
-  hash: {
-    type: String
-  },
-  classes: [{
-    type: Schema.Types.ObjectId, ref: 'Class' 
-  }],
-});
-
-let teacherSchema = new Schema({
+module.exports = function(mongoose) {
+  let studentSchema = new Schema({
+    name: {
+      type: String
+    },
+    username: {
+      type: String
+    },
+    salt: {
+      type: String
+    },
+    hash: {
+      type: String
+    },
+    classes: [{
+      type: Schema.Types.ObjectId, ref: 'Class' 
+    }],
+  });
+  
+  let teacherSchema = new Schema({
     name: {
       type: String
     },
@@ -40,9 +40,9 @@ let teacherSchema = new Schema({
     classes: [{
         type: Schema.Types.ObjectId, ref: 'Class' 
     }],
-});
+  });
 
-let messageSchema = new Schema({
+  let messageSchema = new Schema({
     time: {
       type: Date
     },
@@ -55,9 +55,9 @@ let messageSchema = new Schema({
     class: {
         type: Schema.Types.ObjectId, ref: 'Classs' 
     },
-});
+  });
 
-let classSchema = new Schema({
+  let classSchema = new Schema({
     name: {
       type: String
     },
@@ -76,10 +76,13 @@ let classSchema = new Schema({
     active: {
         type: Boolean
     }
-});
+  });
 
-
-const Student = mongoose.model('Student', studentSchema);
-const Teacher = mongoose.model('Teacher', teacherSchema);
-const Class = mongoose.model('Class', classSchema);
-const Message = mongoose.model('Message', messageSchema);
+  var models = {
+    Student : mongoose.model('Student', studentSchema),
+    Teacher : mongoose.model('Teacher', teacherSchema),
+    Class : mongoose.model('Class', classSchema),
+    Message : mongoose.model('Message', messageSchema)
+  };
+  return models;
+}

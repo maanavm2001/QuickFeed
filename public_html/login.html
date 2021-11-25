@@ -5,6 +5,8 @@
   <meta charset="utf-8">
   <title>QuickFeed-Login</title>
   <link rel="stylesheet" href="css/login.css">
+  <script src="js/jquery.js"></script>
+  <script src="js/code.js"></script>
 </head>
 
 <body id ="body">
@@ -30,13 +32,13 @@
           <br>
           <div id="error"><br></div>
           <label for="username">Email</label>
-          <input type="text" name="username" required>
+          <input type="text" name="username" id="email" required>
           <label for="pass">Password</label>
-          <input type="password" name="pass" required>
+          <input type="password" name="pass" id="pass" required>
           <br>
           <label for="instructor">Login as an Instructor?</label>
           <input type="checkbox" id="instructor" name="instructor" required>
-          <button type="button" name="Submit" class="contact-det" id="send">Login</button>
+          <button type="button" name="Submit" onclick="loginAccount();" class="contact-det" id="send">Login</button>
         </span>
     </main>
   </div>

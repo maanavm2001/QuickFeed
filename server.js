@@ -50,23 +50,26 @@ function isValidSession(username, sessionKey) {
 
 const app = express();
 
-app.use(parser.text({type: '*/*'}));
+app.use(parser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use(express.json());
 app.use('/app/*', authenticate);
 app.use('/', express.static('public_html'));
 
-mongoose.connect("mongodb+srv://modim:Maanavgt21@cluster0.d4bou.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+const mongoDBURL = 'mongodb://127.0.0.1/QuickFeed';
+
+
+mongoose.connect(mongoDBURL, {useNewUrlParser: true})
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error: "));
 db.once("open", function () {
   console.log("Connected successfully");
 });
 
-var hash = crypto.createHash('sha512');
+//var hash = crypto.createHash('sha512');
 
-import { resolveSoa } from 'dns';
+//import { resolveSoa } from 'dns';
 ///////////
 //Code/////
 //Imports//
@@ -74,7 +77,10 @@ import { resolveSoa } from 'dns';
 ///////////
 
 // Models from model.js
-import { Student, Teacher, Message, Class } from '/models.js'
+var Student = require('./models/Student');
+var Teacher = require('./models/Teacher');
+var Class = require('./models/Class');
+var Message = require('./models/Message');
 
 var currTime = 0;
 var ClassLengthSec = 0;
@@ -89,10 +95,10 @@ function authenticate(req, res, next) {
         res.cookie("login", {username: u, key:key}, {maxAge: TIMEOUT});
         next();
       } else {
-        res.redirect('index.html');
+        res.redirect('/index.html');
       }
     } else {
-      res.redirect('index.html');
+      res.redirect('/index.html');
     }
   }
 
@@ -136,26 +142,28 @@ function startClassSession(){
 
 //Account creation/login ////
 
-app.post('/account/student/create/', async (req,res)=>{
-    let requestData = JSON.parse(JSON.stringify(req.body));
-    let requestuserName = requestData.username;
-    let requestStudentName = requestData.studentname
-    let requestPassword = requestData.password;
+app.post('/account/student/create', async (req,res) => {
+    console.log('Student account being created');
+    let reqData = req.body;
+    let name = reqData.name;
+    let password = reqData.password;
+    let email = reqData.email;
 
+    var hash = crypto.createHash('sha512');
     var salt = '' + Math.floor(Math.random() * 100000000);
-    var toHash = requestPassword + salt;
+    var toHash = password + salt;
     data = hash.update(toHash, 'utf-8');
     gen_hash = data.digest('hex');
 
 
-    Student.find({username: requestuserName}).exec( function (err, results){
+    Student.find({email: email}).exec( function (err, results){
         if(err){
-            res.end("Username taken!")
+            res.end("Account already associated with email!")
         }   
         else if(results.length == 0){
             var newStudent = new Student({ 
-                username: requestuserName,
-                studentname: requestStudentName,
+                name: name,
+                email: email,
                 salt: salt,
                 hash: gen_hash,
             });
@@ -168,22 +176,39 @@ app.post('/account/student/create/', async (req,res)=>{
     })  
 })
 
-app.post('/account/student/login', async (req, res)=> {
-    let requestData = JSON.parse(JSON.stringify(req.body));
-    let requestuserName = requestData.username;
-    let requestPassword = requestData.password;
+app.get('/account/get/students', async (req, res) => {
+    Student.find()
+        .exec(function (err, results) {
+            if (err) return handleError(err);
+            res.end(JSON.stringify(results));
+        })
+})
 
-    Student.find({username: requestuserName}).exec( function (err, results){
+app.get('/account/get/teachers', async (req, res) => {
+    Teacher.find()
+        .exec(function (err, results) {
+            if (err) return handleError(err);
+            res.end(JSON.stringify(results));
+        })
+})
+
+app.get('/account/student/login/:email/:password', async (req, res) => {
+    let email = req.params.email;
+    let password = req.params.password;
+    Student.findOne({email: email})
+    .exec( function (err, results) {
         if (err){res.end("user does not exist")}
-        else if (results.salt) {
-            var toHash = requestPassword + results.salt;
+        
+        else if (results && results.salt) {
+            var hash = crypto.createHash('sha512');
+            var toHash = password + results.salt;
             data = hash.update(toHash, 'utf-8');
             gen_hash = data.digest('hex');
             var correct = gen_hash == results.hash;
 
             if(correct){
-                var sessionKey = putSession(results.username);
-                res.cookie("login", {username: results.username, key:sessionKey}, {maxAge: TIMEOUT});
+                var sessionKey = putSession(results.email);
+                res.cookie("login", {name: results.name, key:sessionKey}, {maxAge: TIMEOUT});
                 res.end('SUCCESS');
             }
             else{res.end("wrong password")}
@@ -193,55 +218,57 @@ app.post('/account/student/login', async (req, res)=> {
     })
 })
 
-app.post('/account/teacher/create/', async (req,res)=>{
-    let requestData = JSON.parse(JSON.stringify(req.body));
-    let requestuserName = requestData.username;
-    let requestTeacherName = requestData.teachername
-    let requestPassword = requestData.password;
-    let requestEmail = requestData.email;
+app.post('/account/teacher/create', async (req,res) => {
+    console.log('Teacher account being created');
+    let reqData = req.body;
+    let name = reqData.name;
+    let password = reqData.password;
+    let email = reqData.email;
 
+    var hash = crypto.createHash('sha512');
     var salt = '' + Math.floor(Math.random() * 100000000);
-    var toHash = requestPassword + salt;
+    var toHash = password + salt;
     data = hash.update(toHash, 'utf-8');
     gen_hash = data.digest('hex');
 
-    Teacher.find({username: requestuserName}).exec( function (err, results){
+    Teacher.find({email: email})
+    .exec( function (err, results){
         if(err){
-            res.end("Username taken!")
+            res.end("Email already associated with an account!")
         }   
         else if(results.length == 0){
             var newTeacher = new Teacher({ 
-                username: requestuserName,
-                teachername: requestTeacherName,
-                email: requestEmail,
+                name: name,
+                email: email,
                 salt: salt,
                 hash: gen_hash,
             });
             newTeacher.save(
                 function(err){
                     if (err){return res.end("Error teacher user not made/not saved")}
-                    res.end('User created!');
+                    res.end('Teacher created!');
             });
         }
     })  
 })
 
-app.post('/account/teacher/login', async (req, res)=> {
-    let requestData = JSON.parse(JSON.stringify(req.body));
-    let requestuserName = requestData.username;
-    let requestPassword = requestData.password;
+app.get('/account/teacher/login/:email/:password', async (req, res)=> {
+    let email = req.params.email;
+    let password = req.params.password;
 
-    Teacher.find({username: requestuserName}).exec( function (err, results){
+    Teacher.findOne({email: email})
+    .exec( function (err, results){
         if (err){res.end("user does not exist")}
-        else if (results.salt) {
-            var toHash = requestPassword + results.salt;
+        else if (results && results.salt) {
+            var hash = crypto.createHash('sha512');
+            var toHash = password + results.salt;
             data = hash.update(toHash, 'utf-8');
             gen_hash = data.digest('hex');
             var correct = gen_hash == results.hash;
 
             if(correct){
-                var sessionKey = putSession(results.username);
-                res.cookie("login", {username: results.username, key:sessionKey}, {maxAge: TIMEOUT});
+                var sessionKey = putSession(results.email);
+                res.cookie("login", {name: results.name, key:sessionKey}, {maxAge: TIMEOUT});
                 res.end('SUCCESS');
             }
             else{res.end("wrong password")}
@@ -369,6 +396,6 @@ app.get('/app/:class/:type', async (req,res)=>{
 //Start//
 /////////
 
-app.listen(8000, () => {
+app.listen(80, () => {
     console.log("Server running on localhost 8000");
 });
