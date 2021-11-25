@@ -76,7 +76,7 @@ main {
   top: 15vh;
   height: 85vh;
   width: 100vw;
-  background-image: url("class.jpg");
+  background-image: url("../img/class.jpg");
   background-attachment: fixed;
   background-position: center;
   background-repeat: no-repeat;

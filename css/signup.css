@@ -160,6 +160,11 @@ input[type="checkbox"] {
   transition: .5s;
 }
 
+input:checked[type="checkbox"]{
+  background-color: #aaaaaa;
+}
+
+
 input[type="checkbox"]:before {
   content: '';
   position: absolute;
