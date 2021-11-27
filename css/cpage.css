@@ -147,7 +147,7 @@ main h6 {
   width: 50vw;
   height: 57vh;
   background-color: #9BB1FF;
-  border-radius: 2vh;
+  border-radius: 0.5vh;
 }
 
 #key-feedback h1{
@@ -171,7 +171,7 @@ main h6 {
   width: 30vw;
   height: 57vh;
   background-color: #eeeeee;
-  border-radius: 2vh;
+  border-radius: 0.5vh;
 }
 
 #student-list h1{
@@ -181,8 +181,8 @@ main h6 {
   padding-left: 10vw;
   padding-right: 8.15vw;
   background-color: #EEA59A;
-  border-top-left-radius: 2vh;
-  border-top-right-radius: 2vh;
+  border-top-left-radius: 0.5vh;
+  border-top-right-radius: 0.5vh;
 }
 
 .end-sem-feedback{
@@ -194,7 +194,7 @@ main h6 {
   width: 90.2vw;
   background: #F2FDFF;
   height: 70vh;
-  border-radius: 2vh;
+  border-radius: 0.5vh;
 }
 
 .end-sem-feedback h1{
