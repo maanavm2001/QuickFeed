@@ -136,6 +136,7 @@ header {
 }
 
 #add-course input{
+  text-align: center;
   font-size: 3vh;
   padding: 2vh;
   width: 30vw;
