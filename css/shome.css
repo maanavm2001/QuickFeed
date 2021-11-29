@@ -1,0 +1,220 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap');
+
+* {
+  margin: 0px;
+  font-family: 'Montserrat', sans-serif;
+  scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+body {
+  overflow-x: hidden;
+  overflow-y:scroll;
+}
+
+#particles-js {
+  position: absolute;
+  top: 15vh;
+  height: 40vh;
+  width: 100vw;
+  background: white;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+header {
+  position: absolute;
+  top: 0px;
+  width: 100vw;
+  height: 15vh;
+  background-color: #564787;
+}
+
+#logo {
+  display: inline;
+  float: left;
+  padding-top: 1vh;
+  padding-left: 4vh;
+  font-weight: 800;
+  font-size: 10vh;
+  color: white;
+}
+
+#nav-bar {
+  display: inline;
+  float: right;
+  padding-top: 5vh;
+  padding-right: 1vw;
+  font-weight: 600;
+}
+
+.nav-items {
+  display: inline;
+  position: relative;
+  font-size: 3vh;
+  margin: 2vw;
+  color: white;
+}
+
+.nav-items:after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: white;
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
+}
+
+.nav-items:hover:after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}
+
+
+#intro{
+  position: absolute;
+  top: 20vh;
+  left: 5vw;
+  width: 100vw;
+}
+
+#intro h1{
+  font-size: 7vh;
+}
+
+#view{
+  display: block;
+  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  left: -10vh;
+  font-size: 3vh;
+  font-weight: 600;
+  padding-top: 2.5vh;
+  border-style: none;
+  padding-bottom: 3vh;
+  padding-left: 5.75vw;
+  padding-right: 5.75vw;
+  margin-top: 7.5vh;
+  border-radius: 2vw;
+}
+
+#view:hover {
+  color: white;
+  background-color: #4E407A;
+}
+
+#add-course{
+  position: absolute;
+  width: 100vw;
+  top: 55vh;
+  text-align: center;
+  background-color: #C8D5B9;
+  padding: 3vh;
+}
+
+#add-course h1{
+  font-size: 6vh;
+  font-weight: 650;
+  padding: 1vh;
+}
+
+#add-course h3{
+  font-size: 3vh;
+  font-weight: 450;
+  padding: 1vh;
+}
+
+#add-course input{
+  font-size: 3vh;
+  padding: 2vh;
+  width: 30vw;
+  margin: 2vh;
+  border: 1px solid black;
+  border-radius: 5vh;
+}
+
+#enroll-button {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: white;
+  font-size: 3vh;
+  font-weight: 600;
+  padding-top: 2.5vh;
+  padding-bottom: 3vh;
+  padding-left: 5vw;
+  padding-right: 5vw;
+  border: 0.25vh solid black;
+  border-radius: 2vw;
+}
+
+#enroll-button:hover {
+  background-color: #eeeeee;
+}
+
+#course-gallery{
+  position: absolute;
+  top: 97vh;
+  width: 100vw;
+  background-color: #E26D5C;
+}
+
+#course-gallery h1{
+  position: relative;
+  text-align: center;
+  top: 2vh;
+  font-size: 8.75vh;
+}
+
+.course-tile{
+  display: inline-block;
+  width:28vw;
+  height: 28vh;
+  background-color: white;
+  margin-top: 4.25vh;
+  margin-left: 4vh;
+  margin-bottom: 4.25vh;
+  border-radius: 2vh;
+  /* box-shadow: 2px 2px 10px black; */
+}
+
+.course-tile:hover{
+  display: inline-block;
+  background-color: #eeeeee;
+}
+.course-tile h3{
+  font-size: 5vh;
+  padding-left: 2vh;
+  padding-top: 1.25vh;
+}
+.course-tile h4{
+  padding-left: 2vh;
+}
+
+.student-pop{
+  display: inline;
+  position: relative;
+  top: 11.95vh;
+  padding-top: 2vh;
+  padding-bottom: 2vh;
+  padding-left: 2vh;
+  padding-right: 12.83vw;
+  background-color: black;
+  color: white;
+  border-bottom-left-radius: 2vh;
+  border-bottom-right-radius: 2vh;
+}
+.number{
+  font-weight: 550;
+}
