@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap');
 
+/*Might need to make a popup for course page*/
 * {
   margin: 0px;
   font-family: 'Montserrat', sans-serif;
@@ -18,7 +19,7 @@ body {
 #particles-js {
   position: absolute;
   top: 20vh;
-  height: 35vh;
+  height: 95vh;
   width: 100vw;
   background: white;
 }
@@ -80,95 +81,102 @@ header {
   transform-origin: bottom left;
 }
 
-#intro{
+#add-course{
   position: absolute;
-  top: 20vh;
+  background-color:#eeeeee;
+  top: 21vh;
   left: 5vw;
+  width: 90vw;
+  height: 88vh;
+  margin-bottom: 5vh;
+  border-radius: 2vh;
 }
 
-#intro h1{
-  font-size: 7vh;
+h1{
+  font-size: 7.5vh;
 }
-button {
+
+#add-course h1{
+  padding-top: 5vh;
+  text-align: center;
+}
+
+label, input, textarea, button {
+  display: block;
   position: relative;
-  left: 18%;
+  resize: none;
+  margin-left: 4vh;
+  font-size: 3.5vh;
+}
+
+#form-section {
+  float: left;
+  margin-left: 4vh;
+  margin-top: 5vh;
+  width: 50%;
+  height: 60%;
+  border-right: 0.1vh solid black;
+}
+
+#form-section label{
+  margin-top: 2vh;
+  margin-bottom: 0.5vh;
+  font-weight: 500;
+}
+#form-section textarea, #form-section input{
+  padding: 1.5vh;
+  padding-left: 1.5vh;
+  font-size: 2.5vh;
+  border-radius: 1vh;
+  border: 0.15vh solid black;
+}
+
+button {
+  background-color: #dddddd;
+  color: black;
   font-size: 3vh;
   font-weight: 600;
   padding-top: 2.5vh;
   border-style: none;
   padding-bottom: 3vh;
-  padding-left: 5.75vw;
-  padding-right: 5.75vw;
-  margin-top: 7.5vh;
+  padding-left: 5.5vw;
+  padding-right: 5.5vw;
+  margin-left: 8vw;
+  margin-top: 4vh;
   border-radius: 2vw;
 }
-
 button:hover {
-  color: white;
-  background-color: #4E407A;
-}
-
-#view{
-  left: 15vw;
-}
-
-#add{
-  left: 35vw;
-}
-
-#course-gallery{
-  position: absolute;
-  top: 55vh;
-  width: 100vw;
-  background-color: #E26D5C;
-  box-shadow: 1px 1px 15px black;
-}
-
-#course-gallery h1{
-  position: relative;
-  text-align: center;
-  top: 2vh;
-  font-size: 8.75vh;
-}
-
-.course-tile{
-  display: inline-block;
-  width:28vw;
-  height: 28vh;
-  background-color: white;
-  margin-top: 4.25vh;
-  margin-left: 4vh;
-  margin-bottom: 4.25vh;
-  border-radius: 2vh;
-  /* box-shadow: 2px 2px 10px black; */
-}
-
-.course-tile:hover{
-  display: inline-block;
-  background-color: #eeeeee;
-}
-.course-tile h3{
-  font-size: 5vh;
-  padding-left: 2vh;
-  padding-top: 1.25vh;
-}
-.course-tile h4{
-  padding-left: 2vh;
-}
-
-.student-pop{
-  display: inline;
-  position: relative;
-  top: 11.95vh;
-  padding-top: 2vh;
-  padding-bottom: 2vh;
-  padding-left: 2vh;
-  padding-right: 12.83vw;
   background-color: black;
   color: white;
-  border-bottom-left-radius: 2vh;
-  border-bottom-right-radius: 2vh;
 }
-.number{
+
+#link-section {
+  text-align: center;
+  float: right;
+  padding: 2vh;
+  width: 40%;
+  padding-top: 10vh;
+  padding-right: 5vw;
+}
+
+#link-section h2{
+  font-size: 5vh;
   font-weight: 550;
+}
+#link-section h3{
+  font-size: 3vh;
+  font-weight: 400;
+  padding-bottom: 2vh;
+}
+
+#link{
+  position: absolute;
+  left: 50vw;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 2vh;
+  background-color: white;
+  height: 4vh;
+  width: 42%;
+  border-radius: 3vh;
 }

@@ -17,8 +17,8 @@ body {
 
 #particles-js {
   position: absolute;
-  top: 20vh;
-  height: 35vh;
+  top: 15vh;
+  height: 40vh;
   width: 100vw;
   background: white;
 }
@@ -80,18 +80,24 @@ header {
   transform-origin: bottom left;
 }
 
+
 #intro{
   position: absolute;
   top: 20vh;
   left: 5vw;
+  width: 100vw;
 }
 
 #intro h1{
   font-size: 7vh;
 }
-button {
+
+#view{
+  display: block;
   position: relative;
-  left: 18%;
+  margin-left: auto;
+  margin-right: auto;
+  left: -10vh;
   font-size: 3vh;
   font-weight: 600;
   padding-top: 2.5vh;
@@ -103,25 +109,66 @@ button {
   border-radius: 2vw;
 }
 
-button:hover {
+#view:hover {
   color: white;
   background-color: #4E407A;
 }
 
-#view{
-  left: 15vw;
+#add-course{
+  position: absolute;
+  width: 100vw;
+  top: 55vh;
+  text-align: center;
+  background-color: #C8D5B9;
+  padding: 3vh;
 }
 
-#add{
-  left: 35vw;
+#add-course h1{
+  font-size: 6vh;
+  font-weight: 650;
+  padding: 1vh;
+}
+
+#add-course h3{
+  font-size: 3vh;
+  font-weight: 450;
+  padding: 1vh;
+}
+
+#add-course input{
+  text-align: center;
+  font-size: 3vh;
+  padding: 2vh;
+  width: 30vw;
+  margin: 2vh;
+  border: 1px solid black;
+  border-radius: 5vh;
+}
+
+#enroll-button {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: white;
+  font-size: 3vh;
+  font-weight: 600;
+  padding-top: 2.5vh;
+  padding-bottom: 3vh;
+  padding-left: 5vw;
+  padding-right: 5vw;
+  border: 0.25vh solid black;
+  border-radius: 2vw;
+}
+
+#enroll-button:hover {
+  background-color: #eeeeee;
 }
 
 #course-gallery{
   position: absolute;
-  top: 55vh;
+  top: 97vh;
   width: 100vw;
   background-color: #E26D5C;
-  box-shadow: 1px 1px 15px black;
 }
 
 #course-gallery h1{

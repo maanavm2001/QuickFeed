@@ -7,18 +7,18 @@
 }
 
 ::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 body {
   overflow-x: hidden;
-  overflow-y:scroll;
+  overflow-y: scroll;
 }
 
 #particles-js {
   position: absolute;
-  top: 20vh;
-  height: 35vh;
+  top: 15vh;
+  height: 85vh;
   width: 100vw;
   background: white;
 }
@@ -80,95 +80,80 @@ header {
   transform-origin: bottom left;
 }
 
-#intro{
+main {
   position: absolute;
   top: 20vh;
-  left: 5vw;
-}
-
-#intro h1{
-  font-size: 7vh;
-}
-button {
-  position: relative;
-  left: 18%;
-  font-size: 3vh;
-  font-weight: 600;
-  padding-top: 2.5vh;
-  border-style: none;
-  padding-bottom: 3vh;
-  padding-left: 5.75vw;
-  padding-right: 5.75vw;
-  margin-top: 7.5vh;
-  border-radius: 2vw;
-}
-
-button:hover {
-  color: white;
-  background-color: #4E407A;
-}
-
-#view{
-  left: 15vw;
-}
-
-#add{
-  left: 35vw;
-}
-
-#course-gallery{
-  position: absolute;
-  top: 55vh;
   width: 100vw;
-  background-color: #E26D5C;
-  box-shadow: 1px 1px 15px black;
 }
 
-#course-gallery h1{
+main h1 {
   position: relative;
+  top: -2vh;
+  left: 2vw;
+  font-size: 8vh;
+}
+
+main h6 {
+  position: relative;
+  top: -2vh;
+  left: 2.2vw;
+  font-size: 3vh;
+}
+
+#course-status h1 {
   text-align: center;
-  top: 2vh;
-  font-size: 8.75vh;
+  font-size: 4vh;
+  font-weight: 500;
 }
 
-.course-tile{
+.pulsate {
+  color: red;
+  font-weight: 550;
+  -webkit-animation: pulsate 3s ease-out;
+  -webkit-animation-iteration-count: infinite;
+  opacity: 0.5;
+}
+
+@-webkit-keyframes pulsate {
+  0% {
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 1.0;
+  }
+
+  100% {
+    opacity: 0.5;
+  }
+}
+
+.option{
   display: inline-block;
-  width:28vw;
-  height: 28vh;
+  height: 50vh;
+  width: 22vw;
+  margin: 2.75vh;
+  margin-top: 3.5vh;
+  text-align: center;
   background-color: white;
-  margin-top: 4.25vh;
-  margin-left: 4vh;
-  margin-bottom: 4.25vh;
+  border: 1px solid black;
   border-radius: 2vh;
-  /* box-shadow: 2px 2px 10px black; */
+  /* box-shadow: 1px 1px 15px black; */
 }
 
-.course-tile:hover{
-  display: inline-block;
+.option:hover{
   background-color: #eeeeee;
 }
-.course-tile h3{
-  font-size: 5vh;
-  padding-left: 2vh;
-  padding-top: 1.25vh;
-}
-.course-tile h4{
-  padding-left: 2vh;
+
+.option h3{
+  font-size: 4vh;
+  padding: 2vh;
+  background-color: #FFB563;
+  border-top-left-radius: 2vh;
+  border-top-right-radius: 2vh;
 }
 
-.student-pop{
-  display: inline;
-  position: relative;
-  top: 11.95vh;
-  padding-top: 2vh;
-  padding-bottom: 2vh;
-  padding-left: 2vh;
-  padding-right: 12.83vw;
-  background-color: black;
-  color: white;
-  border-bottom-left-radius: 2vh;
-  border-bottom-right-radius: 2vh;
-}
-.number{
-  font-weight: 550;
+.option h4{
+  margin-top: 14vh;
+  font-weight:450;
 }
