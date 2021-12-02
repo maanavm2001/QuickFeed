@@ -3,23 +3,32 @@ var Schema = mongoose.Schema;
 
 let classSchema = new Schema({
     name: {
-      type: String
+        type: String
     },
     teacher: {
-        type: Schema.Types.ObjectId, ref: 'Teacher' 
+        type: Schema.Types.ObjectId,
+        ref: 'Teacher'
     },
     students: [{
-        type: Schema.Types.ObjectId, ref: 'Student' 
+        type: Schema.Types.ObjectId,
+        ref: 'Student'
     }],
     messages: [{
-        type: Schema.Types.ObjectId, ref: 'Message' 
+        type: Schema.Types.ObjectId,
+        ref: 'Message'
     }],
     classlength: {
         type: Number
     },
     active: {
         type: Boolean
+    },
+    semestername: {
+        type: String
+    },
+    description: {
+        type: String
     }
-  });
+});
 
-  module.exports = mongoose.model('Class', classSchema);
+module.exports = mongoose.model('Class', classSchema);
