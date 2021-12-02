@@ -16,32 +16,32 @@ TIMEOUT = 6000000000;
 var sessions = {};
 
 function filterSessions() {
-  let now = Date.now();
-  for (e in sessions) {
-    if (sessions[e].time < (now - TIMEOUT)) {
-      delete sessions[e];
+    let now = Date.now();
+    for (e in sessions) {
+        if (sessions[e].time < (now - TIMEOUT)) {
+            delete sessions[e];
+        }
     }
-  }
 }
 
 setInterval(filterSessions, 2000);
 
 function putSession(username, sessionKey) {
-  if (username in sessions) {
-    sessions[username] = {'key': sessionKey, 'time': Date.now()};
-    return sessionKey;
-  } else {
-    let sessionKey = Math.floor(Math.random() * 1000);
-    sessions[username] = {'key': sessionKey, 'time': Date.now()};
-    return sessionKey;
-  }
+    if (username in sessions) {
+        sessions[username] = { 'key': sessionKey, 'time': Date.now() };
+        return sessionKey;
+    } else {
+        let sessionKey = Math.floor(Math.random() * 1000);
+        sessions[username] = { 'key': sessionKey, 'time': Date.now() };
+        return sessionKey;
+    }
 }
 
 function isValidSession(username, sessionKey) {
-  if (username in sessions && sessions[username].key == sessionKey) {
-    return true;
-  }
-  return false;
+    if (username in sessions && sessions[username].key == sessionKey) {
+        return true;
+    }
+    return false;
 }
 
 /////////////////////////
@@ -60,11 +60,11 @@ app.use('/', express.static('public_html'));
 const mongoDBURL = 'mongodb://127.0.0.1/QuickFeed';
 
 
-mongoose.connect(mongoDBURL, {useNewUrlParser: true})
+mongoose.connect(mongoDBURL, { useNewUrlParser: true })
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error: "));
-db.once("open", function () {
-  console.log("Connected successfully");
+db.once("open", function() {
+    console.log("Connected successfully");
 });
 
 //var hash = crypto.createHash('sha512');
@@ -81,26 +81,26 @@ var Student = require('./models/Student');
 var Teacher = require('./models/Teacher');
 var Class = require('./models/Class');
 var Message = require('./models/Message');
+var Session = require('./models/Session');
 
 var currTime = 0;
-var ClassLengthSec = 0;
 
 // User authenticate
 function authenticate(req, res, next) {
     if (Object.keys(req.cookies).length > 0) {
-      let u = req.cookies.login.username;
-      let key = req.cookies.login.key;
-      if (isValidSession(u, key)) {
-        putSession(u, key);
-        res.cookie("login", {username: u, key:key}, {maxAge: TIMEOUT});
-        next();
-      } else {
-        res.redirect('/index.html');
-      }
+        let u = req.cookies.login.username;
+        let key = req.cookies.login.key;
+        if (isValidSession(u, key)) {
+            putSession(u, key);
+            res.cookie("login", { username: u, key: key }, { maxAge: TIMEOUT });
+            next();
+        } else {
+            res.redirect('/index.html');
+        }
     } else {
-      res.redirect('/index.html');
+        res.redirect('/index.html');
     }
-  }
+}
 
 function buildMessage(code, timeStamp) {
     finalstring = ''
@@ -115,23 +115,36 @@ function buildMessage(code, timeStamp) {
     return finalstring;
 }
 
-function getTimeStamp(){
+function getTimeStamp() {
     return toHMS(currTime)
 }
 
-function stopClassSession(){
+function stopClassSession() {
     //TODO: compile email data and send
 
 
     currTime = 0;
-    ClassLengthSec = 0;
 }
 
-function startClassSession(){
-    if(currTime == ClassLengthSec){
-        stopClassSession()
-    }
+function startClassSession(currClass, req) {
     currTime++;
+    var d = new Date();
+    var NoTimeDate = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate();
+    sessionClass = Class.find({ classname: currClass }).exec(function(err, res) {
+        if (err) { res.end('Error class may not exist.') }
+    });
+    var classSession = new Session({
+        active: true,
+        date: NoTimeDate,
+        class: sessionClass._id,
+    });
+
+    classSession.save().exec(function(err, res) {
+        if (err) { res.end("Could not save session") }
+        sessionClass.sessions.push(res._id)
+        req.cookies.session = res._id
+
+    });
     setInterval(startClassSession, 1000)
 }
 
@@ -142,7 +155,7 @@ function startClassSession(){
 
 //Account creation/login ////
 
-app.post('/account/student/create', async (req,res) => {
+app.post('/account/student/create', async(req, res) => {
     console.log('Student account being created');
     let reqData = req.body;
     let name = reqData.name;
@@ -156,69 +169,65 @@ app.post('/account/student/create', async (req,res) => {
     gen_hash = data.digest('hex');
 
 
-    Student.find({email: email}).exec( function (err, results){
-        if(err){
+    Student.find({ email: email }).exec(function(err, results) {
+        if (err) {
             res.end("Account already associated with email!")
-        }   
-        else if(results.length == 0){
-            var newStudent = new Student({ 
+        } else if (results.length == 0) {
+            var newStudent = new Student({
                 name: name,
                 email: email,
                 salt: salt,
                 hash: gen_hash,
             });
             newStudent.save(
-                function(err){
-                    if (err){return res.end("Error student user not made/not saved")}
+                function(err) {
+                    if (err) { return res.end("Error student user not made/not saved") }
                     res.end('User created!');
-            });
-        }
-    })  
-})
-
-app.get('/account/get/students', async (req, res) => {
-    Student.find()
-        .exec(function (err, results) {
-            if (err) return handleError(err);
-            res.end(JSON.stringify(results));
-        })
-})
-
-app.get('/account/get/teachers', async (req, res) => {
-    Teacher.find()
-        .exec(function (err, results) {
-            if (err) return handleError(err);
-            res.end(JSON.stringify(results));
-        })
-})
-
-app.get('/account/student/login/:email/:password', async (req, res) => {
-    let email = req.params.email;
-    let password = req.params.password;
-    Student.findOne({email: email})
-    .exec( function (err, results) {
-        if (err){res.end("user does not exist")}
-        
-        else if (results && results.salt) {
-            var hash = crypto.createHash('sha512');
-            var toHash = password + results.salt;
-            data = hash.update(toHash, 'utf-8');
-            gen_hash = data.digest('hex');
-            var correct = gen_hash == results.hash;
-
-            if(correct){
-                var sessionKey = putSession(results.email);
-                res.cookie("login", {name: results.name, key:sessionKey}, {maxAge: TIMEOUT});
-                res.end('SUCCESS');
-            }
-            else{res.end("wrong password")}
-        } else {
-            res.end('There was an issue logging in please try again');
+                });
         }
     })
 })
 
-app.post('/account/teacher/create', async (req,res) => {
+app.get('/account/get/students', async(req, res) => {
+    Student.find()
+        .exec(function(err, results) {
+            if (err) return handleError(err);
+            res.end(JSON.stringify(results));
+        })
+})
+
+app.get('/account/get/teachers', async(req, res) => {
+    Teacher.find()
+        .exec(function(err, results) {
+            if (err) return handleError(err);
+            res.end(JSON.stringify(results));
+        })
+})
+
+app.get('/account/student/login/:email/:password', async(req, res) => {
+    let email = req.params.email;
+    let password = req.params.password;
+    Student.findOne({ email: email })
+        .exec(function(err, results) {
+            if (err) { res.end("user does not exist") } else if (results && results.salt) {
+                var hash = crypto.createHash('sha512');
+                var toHash = password + results.salt;
+                data = hash.update(toHash, 'utf-8');
+                gen_hash = data.digest('hex');
+                var correct = gen_hash == results.hash;
+
+                if (correct) {
+                    var sessionKey = putSession(results.email);
+                    res.cookie("login", { name: results.name, key: sessionKey }, { maxAge: TIMEOUT });
+                    res.end('SUCCESS');
+                } else { res.end("wrong password") }
+            } else {
+                res.end('There was an issue logging in please try again');
+            }
+        })
+})
+
+app.post('/account/teacher/create', async(req, res) => {
     console.log('Teacher account being created');
     let reqData = req.body;
     let name = reqData.name;
@@ -231,51 +240,48 @@ app.post('/account/teacher/create', async (req,res) => {
     data = hash.update(toHash, 'utf-8');
     gen_hash = data.digest('hex');
 
-    Teacher.find({email: email})
-    .exec( function (err, results){
-        if(err){
-            res.end("Email already associated with an account!")
-        }   
-        else if(results.length == 0){
-            var newTeacher = new Teacher({ 
-                name: name,
-                email: email,
-                salt: salt,
-                hash: gen_hash,
-            });
-            newTeacher.save(
-                function(err){
-                    if (err){return res.end("Error teacher user not made/not saved")}
-                    res.end('Teacher created!');
-            });
-        }
-    })  
+    Teacher.find({ email: email })
+        .exec(function(err, results) {
+            if (err) {
+                res.end("Email already associated with an account!")
+            } else if (results.length == 0) {
+                var newTeacher = new Teacher({
+                    name: name,
+                    email: email,
+                    salt: salt,
+                    hash: gen_hash,
+                });
+                newTeacher.save(
+                    function(err) {
+                        if (err) { return res.end("Error teacher user not made/not saved") }
+                        res.end('Teacher created!');
+                    });
+            }
+        })
 })
 
-app.get('/account/teacher/login/:email/:password', async (req, res)=> {
+app.get('/account/teacher/login/:email/:password', async(req, res) => {
     let email = req.params.email;
     let password = req.params.password;
 
-    Teacher.findOne({email: email})
-    .exec( function (err, results){
-        if (err){res.end("user does not exist")}
-        else if (results && results.salt) {
-            var hash = crypto.createHash('sha512');
-            var toHash = password + results.salt;
-            data = hash.update(toHash, 'utf-8');
-            gen_hash = data.digest('hex');
-            var correct = gen_hash == results.hash;
+    Teacher.findOne({ email: email })
+        .exec(function(err, results) {
+            if (err) { res.end("user does not exist") } else if (results && results.salt) {
+                var hash = crypto.createHash('sha512');
+                var toHash = password + results.salt;
+                data = hash.update(toHash, 'utf-8');
+                gen_hash = data.digest('hex');
+                var correct = gen_hash == results.hash;
 
-            if(correct){
-                var sessionKey = putSession(results.email);
-                res.cookie("login", {name: results.name, key:sessionKey}, {maxAge: TIMEOUT});
-                res.end('SUCCESS');
+                if (correct) {
+                    var sessionKey = putSession(results.email);
+                    res.cookie("login", { name: results.name, key: sessionKey }, { maxAge: TIMEOUT });
+                    res.end('SUCCESS');
+                } else { res.end("wrong password") }
+            } else {
+                res.end('There was an issue logging in please try again');
             }
-            else{res.end("wrong password")}
-        } else {
-            res.end('There was an issue logging in please try again');
-        }
-    })
+        })
 })
 
 //App ///
@@ -284,80 +290,76 @@ app.get('/account/teacher/login/:email/:password', async (req, res)=> {
     Posts
 */
 
-app.post('/app/teacher/class/create/', async (req,res)=>{
+app.post('/app/teacher/class/create/', async(req, res) => {
     let requestData = JSON.parse(JSON.stringify(req.body));
     let requestclassName = requestData.classname;
-    let requestTeacherName = requestData.teachername
-    let requestLength = requestData.length;
-    let requestStudents = requestData.students;
+    let requestSemesterName = requestData.semestername;
+    let requestDescription = requestData.description;
 
-    Class.find({classname: requestclassName}).exec( function (err, results){
-        if(err){
+    Class.find({ classname: requestclassName }).exec(function(err, results) {
+        if (err) {
             res.end("Class exists!")
-        }   
-        else if(results.length == 0){
-            var newClass = new Class({ 
+        } else if (results.length == 0) {
+            var newClass = new Class({
                 classname: requestclassName,
-                teachername: requestTeacherName,
-                classlength: requestLength,
-                students: requestStudents
+                teachername: req.cookie.username,
+                semestername: requestSemesterName,
+                description: requestDescription
             });
 
             newClass.save(
-                function(newClass, err){
-                    if (err){return res.end("Error class not made/not saved")}
-                    Teacher.find({teachername: newClass.resteachername}).exec( function (err, results){
-                        if(err){res.end('error')}
+                function(newClass, err) {
+                    if (err) { return res.end("Error class not made/not saved") }
+                    Teacher.find({ teachername: newClass.resteachername }).exec(function(err, results) {
+                        if (err) { res.end('error') }
                         results.classes.push(newClass._id)
-                        result.save(function (err) { 
-                            if (err) return res.end('FAIL'); 
+                        result.save(function(err) {
+                            if (err) return res.end('FAIL');
                             else { res.end('SUCCESS!'); }
                         });
                     });
-                res.end('Class created!');
-            });
+                    res.end('Class created!');
+                });
         }
-    })  
+    })
 })
 
 /*
     Gets
 */
 
-app.get('/app/:class/start', async (req,res) => {
+app.get('/app/:class/start', async(req, res) => {
     const currClass = req.params.class;
-   
-    startClass = Class.find({classname: currClass}).exec(function (err, res) {
-        if(err){res.end('Error class may not exist.')}
+
+    startClass = Class.find({ classname: currClass }).exec(function(err, res) {
+        if (err) { res.end('Error class may not exist.') }
     });
     startClass.active = true;
-    ClassLengthSec = startClass.classlength * 60;
-    startClass.save().exec(function (err){if(err){res.end("Couldn't start")}});
+    startClass.save().exec(function(err) { if (err) { res.end("Couldn't start") } });
 
-    startClassSession()
+    startClassSession(currClass, req)
     res.end('Class started')
 })
 
-app.get('/app/:class/stop', async (req,res) => {
+app.get('/app/:class/stop', async(req, res) => {
     const currClass = req.params.class;
-   
-    startClass = Class.find({classname: currClass}).exec(function (err, res) {
-        if(err){res.end('Error class may not exist.')}
+
+    startClass = Class.find({ classname: currClass }).exec(function(err, res) {
+        if (err) { res.end('Error class may not exist.') }
     });
     startClass.active = false;
-    startClass.save().exec(function (err){if(err){res.end("Couldn't end")}});
+    startClass.save().exec(function(err) { if (err) { res.end("Couldn't end") } });
 
     stopClassSession()
     res.end('Class ended')
 })
 
-app.get('/app/:class/:type', async (req,res)=>{
+app.get('/app/:class/:type', async(req, res) => {
     const currClass = req.params.class;
     let u = req.cookies.login.username;
 
-    Class.find({classname: currClass}).exec(function (err, res) {
-        if (err) {res.send('error')}
-        else if(res.active){
+    Class.find({ classname: currClass }).exec(function(err, res) {
+        if (err) { res.send('error') } else if (res.active) {
             const mesasgeType = req.params.type;
             const timeStamp = getTimeStamp();
 
@@ -370,25 +372,24 @@ app.get('/app/:class/:type', async (req,res)=>{
                 class: currClass
             })
 
-            newMessage.save().exec(function (newMesssage, err){
-                if(err){res.end('error')}
-                Class.find({classname: res.class}).exec( function (err, results){
-                    if(err){
+            newMessage.save().exec(function(newMesssage, err) {
+                if (err) { res.end('error') }
+                Class.find({ classname: res.class }).exec(function(err, results) {
+                    if (err) {
                         res.end("error")
-                    }   
+                    }
                     results.mesasges.push(newMesssage._id)
-                    results.save().exec(function (err){if (err) {res.end('error')}})
-                }) 
-                Student.find({username: res.student}).exec( function (err, results){
-                    if(err){
+                    results.save().exec(function(err) { if (err) { res.end('error') } })
+                })
+                Student.find({ username: res.student }).exec(function(err, results) {
+                    if (err) {
                         res.end("error")
-                    }   
+                    }
                     results.mesasges.push(newMesssage._id)
-                    results.save().exec(function (err){if (err) {res.end('error')}})
-                }) 
-            }) 
-        }
-        else {res.end('class not active')}
+                    results.save().exec(function(err) { if (err) { res.end('error') } })
+                })
+            })
+        } else { res.end('class not active') }
     })
 })
 

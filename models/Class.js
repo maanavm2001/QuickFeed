@@ -6,8 +6,7 @@ let classSchema = new Schema({
         type: String
     },
     teacher: {
-        type: Schema.Types.ObjectId,
-        ref: 'Teacher'
+        type: String
     },
     students: [{
         type: Schema.Types.ObjectId,
@@ -17,9 +16,10 @@ let classSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Message'
     }],
-    classlength: {
-        type: Number
-    },
+    sessions: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Session'
+    }],
     active: {
         type: Boolean
     },
