@@ -126,6 +126,10 @@ function stopClassSession() {
     currTime = 0;
 }
 
+function secondUp() {
+    currTime++
+}
+
 function startClassSession(currClass, req) {
     currTime++;
     var d = new Date();
@@ -142,10 +146,11 @@ function startClassSession(currClass, req) {
     classSession.save().exec(function(err, res) {
         if (err) { res.end("Could not save session") }
         sessionClass.sessions.push(res._id)
+        sessionClass.save().exec(function(err) { if (err) { res.end('error') } })
         req.cookies.session = res._id
 
     });
-    setInterval(startClassSession, 1000)
+    setInterval(secondUp, 1000)
 }
 
 ///////////
@@ -354,10 +359,11 @@ app.get('/app/:class/stop', async(req, res) => {
     res.end('Class ended')
 })
 
-app.get('/app/:class/:type', async(req, res) => {
-    const currClass = req.params.class;
+app.get('/app/class/:type', async(req, res) => {
+    const session = req.cookies.session;
     let u = req.cookies.login.username;
-
+    currSession = Session.find({ _id: session })
+    currClass = currSession.class;
     Class.find({ classname: currClass }).exec(function(err, res) {
         if (err) { res.send('error') } else if (res.active) {
             const mesasgeType = req.params.type;
@@ -388,6 +394,8 @@ app.get('/app/:class/:type', async(req, res) => {
                     results.mesasges.push(newMesssage._id)
                     results.save().exec(function(err) { if (err) { res.end('error') } })
                 })
+                currSession.mesasges.push(newMessage._id);
+                currSession.save().exec(function(err) { if (err) { res.end('error') } })
             })
         } else { res.end('class not active') }
     })
