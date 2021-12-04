@@ -296,12 +296,13 @@ app.get('/account/teacher/login/:email/:password', async(req, res) => {
     Posts
 */
 
-app.post('/app/teacher/class/create', async(req, res) => {
-    let requestData = req.body;
-    let requestclassName = requestData.classname;
-    let requestSemesterName = requestData.semestername;
+app.post('/app/teacher/class/create/:name/:semester/:description', async(req, res) => {
+    let requestData = req.params;
+    let requestclassName = requestData.name;
+    let requestSemesterName = requestData.semester;
     let requestDescription = requestData.description;
     console.log(req.cookie);
+    console.log(requestData);
     res.end('Class created!');
     /*
     Class.find({ name: requestclassName }).exec(function(err, results) {

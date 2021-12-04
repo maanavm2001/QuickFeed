@@ -21,10 +21,19 @@ function viewCourses() {
 }
 
 function createCourse() {
+    var courseName = $('#name').val();
+    var semesterName = $('#semester').val();
+    var description = $('#description').val();
     
+    $.post('/app/teacher/class/create', {
+        name: courseName,
+        semester: semesterName,
+        description: description
+    }, (data, status) => {
+        alert(data);
+    });
 }
 
 $(document).ready(function() {
-    console.log(user.name)
     $('#username').text(user.name);
 })
