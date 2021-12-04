@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 let teacherSchema = new Schema({
+    _id: Schema.Types.ObjectId,
     name: {
       type: String
     },

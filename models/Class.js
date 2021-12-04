@@ -2,11 +2,13 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 let classSchema = new Schema({
+    _id: Schema.Types.ObjectId,
     name: {
         type: String
     },
     teacher: {
-        type: String
+        type: Schema.Types.ObjectId,
+        ref: 'Teacher'
     },
     students: [{
         type: Schema.Types.ObjectId,

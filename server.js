@@ -8,6 +8,7 @@ const express = require('express');
 const parser = require('body-parser')
 const cookieParser = require('cookie-parser');
 const crypto = require('crypto');
+const { v4: uuidv4 } = require('uuid');
 
 ////////////////////
 ////SESSION CODE////
@@ -223,7 +224,7 @@ app.get('/account/student/login/:email/:password', async(req, res) => {
 
                 if (correct) {
                     var sessionKey = putSession(results.email);
-                    res.cookie("login", { name: results.name, key: sessionKey }, { maxAge: TIMEOUT });
+                    res.cookie("login", { user: results, key: sessionKey }, { maxAge: TIMEOUT });
                     res.end('SUCCESS');
                 } else { res.end("wrong password") }
             } else {
@@ -280,7 +281,7 @@ app.get('/account/teacher/login/:email/:password', async(req, res) => {
 
                 if (correct) {
                     var sessionKey = putSession(results.email);
-                    res.cookie("login", { name: results.name, key: sessionKey }, { maxAge: TIMEOUT });
+                    res.cookie("login", { user: results, key: sessionKey }, { maxAge: TIMEOUT });
                     res.end('SUCCESS');
                 } else { res.end("wrong password") }
             } else {
@@ -295,17 +296,26 @@ app.get('/account/teacher/login/:email/:password', async(req, res) => {
     Posts
 */
 
-app.post('/app/teacher/class/create/', async(req, res) => {
-    let requestData = JSON.parse(JSON.stringify(req.body));
+app.post('/app/teacher/class/create', async(req, res) => {
+    let requestData = req.body;
     let requestclassName = requestData.classname;
     let requestSemesterName = requestData.semestername;
     let requestDescription = requestData.description;
-
-    Class.find({ classname: requestclassName }).exec(function(err, results) {
+    console.log(req.cookie);
+    res.end('Class created!');
+    /*
+    Class.find({ name: requestclassName }).exec(function(err, results) {
         if (err) {
             res.end("Class exists!")
         } else if (results.length == 0) {
             var newClass = new Class({
+                //id: reqID,
+                //name: requestclassName,
+                //teacher: req.cookie.user.id,
+                //students
+                _id: new mongoose.Types.ObjectId(),
+                name: 
+
                 classname: requestclassName,
                 teachername: req.cookie.username,
                 semestername: requestSemesterName,
@@ -327,6 +337,7 @@ app.post('/app/teacher/class/create/', async(req, res) => {
                 });
         }
     })
+    */
 })
 
 /*
@@ -357,6 +368,22 @@ app.get('/app/:class/stop', async(req, res) => {
 
     stopClassSession()
     res.end('Class ended')
+})
+
+app.get('/clear/database', async(req, res) => {
+    Student.deleteMany({})
+        .exec(function(err, results) {})
+    Teacher.deleteMany({})
+        .exec(function(err, results) {})
+
+    Class.deleteMany({})
+        .exec(function(err, results) {})
+
+    Message.deleteMany({})
+        .exec(function(err, results) {})
+
+        res.end("database cleared.")
+
 })
 
 app.get('/app/class/:type', async(req, res) => {

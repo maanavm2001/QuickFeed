@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Homepage</title>
+    <link rel="stylesheet" href="css/shome.css">
+    <script src="js/jquery.js"></script>
+    <script src="js/appCode.js"></script>
+  </head>
+  <body>
+    <div id="particles-js"></div>
+    <header>
+      <span id="logo"><a href="#">QuickFeed</a></span>
+      <nav id="nav-bar">
+        <li id="signup-button" class="nav-items">Sign Out</li>
+      </nav>
+    </header>
+    <div id="intro">
+      <h1> Hey, <span id="username">User</span> ! Welcome Back!</h1>
+      <a href="#course-gallery"><button type="button" name="view" class="instructor-button" id="view">View all courses</button></a>
+    </div>
+    <div id ="add-course">
+      <div id = "error"></div>
+      <h1> Want to add a new course to your schedule? </h1>
+      <h3> It's easy! Just copy  and paste the link sent to you by your Instructor </h3>
+      <input type="text" id ="link-input" placeholder = "Type or paste your link here">
+      <button id = "enroll-button">Enroll Now!</button>
+    </div>
+    <div id="course-gallery">
+      <h1>Courses</h1>
+      <a href="student-course-page.html">
+        <div class="course-tile">
+          <h3>Random Course</h3>
+          <h4>Random Semester</h4>
+          <span class="student-pop"> Number of Students: <span class="number">0</span></span>
+        </div>
+      </a>
+    </div>
+  </body>
+  <script type="text/javascript" src="js/particles.js"></script>
+  <script type="text/javascript" src="js/app.js"></script>
+</html>
