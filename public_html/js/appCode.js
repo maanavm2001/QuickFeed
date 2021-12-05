@@ -1,15 +1,10 @@
 var user = getUser();
+var currentCourse;
 
 function getUser() {
     let x = decodeURIComponent(document.cookie);
     x = JSON.parse(x.split(':').slice(1).join(':')).user;
-
-    console.log(x);
     return x;
-}
-
-function getUsername() {
-    return user.name;
 }
 
 function getTeacherCourses() {
@@ -17,16 +12,35 @@ function getTeacherCourses() {
         if (data == 'FAIL') {
             alert("fail");
         } else {
-            viewCourses(data);
+            viewCourses(JSON.parse(data).classes);
         }
     })
+}
+
+function getStudentCourses() {
+    $.get('/app/student/classes/' + user._id, (data, status) => {
+        if (data == 'FAIL') {
+            alert("fail");
+        } else {
+            viewCourses(JSON.parse(data).classes);
+        }
+    })
+}
+
+function joinCourse() {
+    let courseID = $('#link-input').val();
+    $.post('/app/student/class/join', {
+        courseID: courseID
+    }, (data, status) => {
+        console.log(data);
+        window.location.href = data;
+    });
 }
 
 function viewCourses(courses) {
     let courseGallery = document.getElementById('course-gallery');
     courseGallery.html = '';
-    let x = JSON.parse(courses).classes;
-    console.log(x);
+    let x = courses;
     resStr = '<h1> Courses </h1>';
     for (var i in x) {
         innerDiv = '<div class=course-tile onclick=goToCoursePage("' + x[i]._id + '");>';
@@ -43,6 +57,21 @@ function goToCoursePage(courseID) {
     window.location.href = 'course-page.html?classID=' + courseID;
 }
 
+function getCourseDetails() {
+    const queryString = window.location.search;
+    const params = new URLSearchParams(queryString);
+    const classID = params.get('classID');
+    $.get('/account/course/' + classID, (data, status) => {
+        if (data == 'FAIL') {
+            alert('fail');
+        } else {
+            console.log(data);
+            currentCourse = JSON.parse(data);
+            showCourseDetails();
+        }
+    })
+}
+
 function createCourse() {
     var courseName = $('#name').val();
     var semesterName = $('#semester').val();
@@ -53,8 +82,28 @@ function createCourse() {
         semester: semesterName,
         description: description
     }, (data, status) => {
-        alert(data);
+        showCourseLink(data);
     });
+}
+
+function showCourseLink(classID) {
+    let linkSection = document.getElementById('link-section');
+    let link = document.getElementById('link');
+
+    link.innerHTML = classID;
+    linkSection.style.display = "block";
+}
+
+function signOut() {
+    $.get('/account/signout/' + user._id, (data, status) => {
+        window.location.href = data;
+    })
+}
+
+function showCourseDetails() {
+    $('#course-name').text(currentCourse.name);
+    $('#semester-name').text(currentCourse.semestername);
+
 }
 
 $(document).ready(function() {

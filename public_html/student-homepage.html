@@ -12,7 +12,7 @@
     <header>
       <span id="logo"><a href="#">QuickFeed</a></span>
       <nav id="nav-bar">
-        <li id="signup-button" class="nav-items">Sign Out</li>
+        <li id="signup-button" class="nav-items" onclick="signOut();">Sign Out</li>
       </nav>
     </header>
     <div id="intro">
@@ -24,7 +24,7 @@
       <h1> Want to add a new course to your schedule? </h1>
       <h3> It's easy! Just copy  and paste the link sent to you by your Instructor </h3>
       <input type="text" id ="link-input" placeholder = "Type or paste your link here">
-      <button id = "enroll-button">Enroll Now!</button>
+      <button id = "enroll-button" onclick="joinCourse();">Enroll Now!</button>
     </div>
     <div id="course-gallery">
       <h1>Courses</h1>
@@ -39,4 +39,5 @@
   </body>
   <script type="text/javascript" src="js/particles.js"></script>
   <script type="text/javascript" src="js/app.js"></script>
+  <script> getStudentCourses(); </script>
 </html>

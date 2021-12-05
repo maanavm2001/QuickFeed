@@ -157,6 +157,7 @@ button:hover {
   width: 40%;
   padding-top: 10vh;
   padding-right: 5vw;
+  display: none;
 }
 
 #link-section h2{

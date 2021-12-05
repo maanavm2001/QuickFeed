@@ -180,6 +180,7 @@ app.post('/account/student/create', async(req, res) => {
             res.end("Account already associated with email!")
         } else if (results.length == 0) {
             var newStudent = new Student({
+                _id: new mongoose.Types.ObjectId(),
                 name: name,
                 email: email,
                 salt: salt,
@@ -208,6 +209,14 @@ app.get('/account/get/teachers', async(req, res) => {
             if (err) return handleError(err);
             res.end(JSON.stringify(results));
         })
+})
+
+app.get('/account/get/classes', async(req, res) => {
+    Class.find()
+    .exec(function(err, results) {
+        if (err) return handleError(err);
+        res.end(JSON.stringify(results));
+    })
 })
 
 app.get('/account/student/login/:email/:password', async(req, res) => {
@@ -252,6 +261,7 @@ app.post('/account/teacher/create', async(req, res) => {
                 res.end("Email already associated with an account!")
             } else if (results.length == 0) {
                 var newTeacher = new Teacher({
+                    _id: new mongoose.Types.ObjectId(),
                     name: name,
                     email: email,
                     salt: salt,
@@ -290,11 +300,49 @@ app.get('/account/teacher/login/:email/:password', async(req, res) => {
         })
 })
 
+app.get('/account/signout/:userID', (req, res) => {
+    delete sessions[req.params.userID];
+    res.end('/index.html');
+})
+
+app.get('/account/course/:courseID', (req, res) => {
+    console.log(req.params);
+    Class.findOne({ _id: req.params.courseID })
+    .exec(function(err, result) {
+        if (err) {
+            console.log(err);
+            res.end("FAIL");
+        } else {
+            console.log(result);
+            res.end(JSON.stringify(result));
+        }
+    })
+})
+
 //App ///
 
 /*
     Posts
 */
+
+app.post('/app/student/class/join', async(req, res) => {
+    console.log('here');
+    let studentID = req.cookies.login.user._id;
+    let reqData = req.body;
+    let courseID = reqData.courseID;
+
+    addStudentToClass(courseID, studentID, function(err, response) {
+        if (err) {
+            res.end('FAIL');
+        } else {
+            addClassToStudent(courseID, studentID, function(err, response) {
+                if (err) res.end('FAIL');
+                console.log('here2');
+                res.end('/student-homepage.html');
+            })
+        }
+    })
+})
 
 app.post('/app/teacher/class/create', async(req, res) => {
     let teacher = req.cookies.login.user;
@@ -321,12 +369,8 @@ app.post('/app/teacher/class/create', async(req, res) => {
             newClass.save(
                 function(err, newClass) {
                     if (err) { 
-                        console.log(err);
-                        console.log(newClass);
                         return res.end("Error class not made/not saved") 
                     }
-                    console.log(newClass);
-                    console.log(teacher._id);
                     Teacher.findOne({ _id: teacher._id })
                         .exec(function(err, result) {
                         if (err) { res.end('error') }
@@ -336,7 +380,8 @@ app.post('/app/teacher/class/create', async(req, res) => {
                             else { res.end('SUCCESS!'); }
                         });
                     });
-                    res.end('Class created!');
+                    console.log(newClass._id);
+                    res.end(newClass._id.toString());
                 });
         }
     })
@@ -358,6 +403,19 @@ app.get('/app/teacher/classes/:teacherID', async(req, res) => {
             res.end(JSON.stringify(teacher))
         })
 
+})
+
+app.get('/app/student/classes/:studentID', async(req, res) => {
+    var studentID = req.params.studentID;
+
+    Student.findOne({ _id: studentID })
+        .populate('classes')
+        .exec(function(err, student) {
+            if (err) {
+                res.end('FAIL');
+            }
+            res.end(JSON.stringify(student))
+        })
 })
 
 
@@ -444,6 +502,28 @@ app.get('/app/class/:type', async(req, res) => {
         } else { res.end('class not active') }
     })
 })
+
+function addClassToStudent(classID, studentID, _callback) {
+    Student.updateOne(
+        { _id: studentID },
+        { $push: {classes: classID}},
+        function (err, response) {
+            _callback(err, response);
+        }
+    )
+}
+
+function addStudentToClass(classID, studentID, _callback) {
+    Class.updateOne(
+        { _id: classID },
+        { $push: {students: studentID}},
+        function (err, response) {
+            _callback(err, response);
+        }
+    )
+}
+
+
 
 /////////
 //Start//
