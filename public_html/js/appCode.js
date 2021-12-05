@@ -12,12 +12,35 @@ function getUsername() {
     return user.name;
 }
 
-function getCourses() {
-
+function getTeacherCourses() {
+    $.get('/app/teacher/classes/' + user._id, (data, status) => {
+        if (data == 'FAIL') {
+            alert("fail");
+        } else {
+            viewCourses(data);
+        }
+    })
 }
 
-function viewCourses() {
+function viewCourses(courses) {
+    let courseGallery = document.getElementById('course-gallery');
+    courseGallery.html = '';
+    let x = JSON.parse(courses).classes;
+    console.log(x);
+    resStr = '<h1> Courses </h1>';
+    for (var i in x) {
+        innerDiv = '<div class=course-tile onclick=goToCoursePage("' + x[i]._id + '");>';
+        innerDiv += '<h3>' + x[i].name + '</h3>';
+        innerDiv += '<h4>' + x[i].semestername + '</h4>';
+        innerDiv += '<span class=student-pop> Number of Students: <span class=number>' + x[i].students.length + '</span></span>';
+        innerDiv += '</div>';
+        resStr += innerDiv;
+    }
+    courseGallery.innerHTML = resStr;
+}
 
+function goToCoursePage(courseID) {
+    window.location.href = 'course-page.html?classID=' + courseID;
 }
 
 function createCourse() {

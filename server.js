@@ -89,11 +89,11 @@ var currTime = 0;
 // User authenticate
 function authenticate(req, res, next) {
     if (Object.keys(req.cookies).length > 0) {
-        let u = req.cookies.login.username;
+        let u = req.cookies.login.user;
         let key = req.cookies.login.key;
-        if (isValidSession(u, key)) {
-            putSession(u, key);
-            res.cookie("login", { username: u, key: key }, { maxAge: TIMEOUT });
+        if (isValidSession(u._id, key)) {
+            putSession(u._id, key);
+            res.cookie("login", { user: u, key: key }, { maxAge: TIMEOUT });
             next();
         } else {
             res.redirect('/index.html');
@@ -223,7 +223,7 @@ app.get('/account/student/login/:email/:password', async(req, res) => {
                 var correct = gen_hash == results.hash;
 
                 if (correct) {
-                    var sessionKey = putSession(results.email);
+                    var sessionKey = putSession(results._id);
                     res.cookie("login", { user: results, key: sessionKey }, { maxAge: TIMEOUT });
                     res.end('SUCCESS');
                 } else { res.end("wrong password") }
@@ -280,7 +280,7 @@ app.get('/account/teacher/login/:email/:password', async(req, res) => {
                 var correct = gen_hash == results.hash;
 
                 if (correct) {
-                    var sessionKey = putSession(results.email);
+                    var sessionKey = putSession(results._id);
                     res.cookie("login", { user: results, key: sessionKey }, { maxAge: TIMEOUT });
                     res.end('SUCCESS');
                 } else { res.end("wrong password") }
@@ -296,39 +296,41 @@ app.get('/account/teacher/login/:email/:password', async(req, res) => {
     Posts
 */
 
-app.post('/app/teacher/class/create/:name/:semester/:description', async(req, res) => {
-    let requestData = req.params;
+app.post('/app/teacher/class/create', async(req, res) => {
+    let teacher = req.cookies.login.user;
+    let requestData = req.body;
     let requestclassName = requestData.name;
     let requestSemesterName = requestData.semester;
     let requestDescription = requestData.description;
-    console.log(req.cookie);
-    console.log(requestData);
-    res.end('Class created!');
-    /*
-    Class.find({ name: requestclassName }).exec(function(err, results) {
+
+    Class.find({ name: requestclassName })
+        .exec(function(err, results) {
         if (err) {
             res.end("Class exists!")
         } else if (results.length == 0) {
             var newClass = new Class({
-                //id: reqID,
-                //name: requestclassName,
-                //teacher: req.cookie.user.id,
-                //students
                 _id: new mongoose.Types.ObjectId(),
-                name: 
-
-                classname: requestclassName,
-                teachername: req.cookie.username,
+                name: requestclassName,
+                teacher: teacher._id,
+                messages: [],
+                sessions: [],
+                active: false,
                 semestername: requestSemesterName,
                 description: requestDescription
             });
-
             newClass.save(
-                function(newClass, err) {
-                    if (err) { return res.end("Error class not made/not saved") }
-                    Teacher.find({ teachername: newClass.resteachername }).exec(function(err, results) {
+                function(err, newClass) {
+                    if (err) { 
+                        console.log(err);
+                        console.log(newClass);
+                        return res.end("Error class not made/not saved") 
+                    }
+                    console.log(newClass);
+                    console.log(teacher._id);
+                    Teacher.findOne({ _id: teacher._id })
+                        .exec(function(err, result) {
                         if (err) { res.end('error') }
-                        results.classes.push(newClass._id)
+                        result.classes.push(newClass._id)
                         result.save(function(err) {
                             if (err) return res.end('FAIL');
                             else { res.end('SUCCESS!'); }
@@ -338,12 +340,26 @@ app.post('/app/teacher/class/create/:name/:semester/:description', async(req, re
                 });
         }
     })
-    */
 })
 
 /*
     Gets
 */
+
+app.get('/app/teacher/classes/:teacherID', async(req, res) => {
+    var teacherID = req.params.teacherID;
+
+    Teacher.findOne({ _id: teacherID })
+        .populate('classes')
+        .exec(function(err, teacher) {
+            if (err) {
+                res.end('FAIL');
+            }
+            res.end(JSON.stringify(teacher))
+        })
+
+})
+
 
 app.get('/app/:class/start', async(req, res) => {
     const currClass = req.params.class;
