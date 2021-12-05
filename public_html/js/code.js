@@ -1,4 +1,9 @@
 
+function getUsername() {
+    let x = decodeURIComponent(document.cookie);
+    console.log(x);
+    return x;
+}
 
 function createAccount() {
     let isInstructor = $('#instructor');
@@ -54,7 +59,7 @@ function loginStudent() {
     let pass = $('#pass').val();
     $.get('/account/student/login/' + email + '/' + pass, (data, status) => {
         if (data == 'SUCCESS') {
-            window.location.href = '/instructor-homepage.html';
+            window.location.href = '/student-homepage.html';
         } else {
             alert(data);
         }
@@ -73,3 +78,4 @@ function loginTeacher() {
         }
     })
 }
+

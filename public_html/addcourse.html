@@ -4,6 +4,8 @@
     <meta charset="utf-8">
     <title>Add Course</title>
     <link rel="stylesheet" href="css/add.css">
+    <script src="js/jquery.js"></script>
+    <script src="js/code.js"></script>
   </head>
   <body>
     <div id="particles-js"></div>
@@ -22,7 +24,7 @@
         <input type="text" id="semester" required>
         <label for="desciption">Description <i>(Optional)</i></label>
         <textarea id="description" rows="5" cols="45"></textarea>
-        <button type="submit" name="Add Course"> Add Course </button>
+        <button type="submit" name="Add Course" onclick="createCourse();"> Add Course </button>
       </div>
       <div id="link-section">
         <h2>New Course added!</h2>
