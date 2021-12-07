@@ -1,3 +1,9 @@
+<!-- Programmer: Aditya Kumar
+Project: QuickFeed - Easy Feedback
+Page: student-course.html
+This the course page that the student sees, and this is
+where they get an option to give feedback to the instructor
+if the class is live-->
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 
@@ -11,9 +17,11 @@
 
 <body>
   <div id="particles-js"></div>
+  <!-- Navigation Bar -->
   <header>
     <span id="logo"><a href="student-homepage.html">QuickFeed</a></span>
     <nav id="nav-bar">
+      <li class="nav-items"><a href="help.html">Need Help?</a></li>
       <li id="signup-button" class="nav-items" onclick="signOut();">Sign Out</li>
     </nav>
   </header>
@@ -26,6 +34,7 @@
       <h1>This class is <span class="pulsate">LIVE</span> right now!</h1>
       <h1>Easily enter your feedback below!</h1>
     </div>
+    <!-- Feedback options, all 4 options -->
     <div class="feedback-options">
       <div id = "success"></div>
       <div class="option">
@@ -46,6 +55,8 @@
       </div>
     </div>
   </main>
+  <!-- This will remain hidden if the class is live -->
+  <div id = "not-live"><h1> The Class is not live right now, Check back later! </h1></div>
 </body>
 <script type="text/javascript" src="js/particles.js"></script>
 <script type="text/javascript" src="js/app.js"></script>

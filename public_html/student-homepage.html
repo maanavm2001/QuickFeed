@@ -1,5 +1,13 @@
+<!-- Programmer: Aditya Kumar
+Project: QuickFeed - Easy Feedback
+Page: student-homepage.html
+This the homepage for the students, and they
+see all of their courses and course-related actions
+here-->
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
+
   <head>
     <meta charset="utf-8">
     <title>Homepage</title>
@@ -7,11 +15,14 @@
     <script src="js/jquery.js"></script>
     <script src="js/studentHome.js"></script>
   </head>
+
   <body>
     <div id="particles-js"></div>
+    <!-- Navigation Section -->
     <header>
       <span id="logo"><a href="#">QuickFeed</a></span>
       <nav id="nav-bar">
+        <li class="nav-items"><a href="help.html">Need Help?</a></li>
         <li id="signup-button" class="nav-items" onclick="signOut();">Sign Out</li>
       </nav>
     </header>
@@ -20,8 +31,8 @@
       <a href="#course-gallery"><button type="button" name="view" class="instructor-button" id="view">View all courses</button></a>
     </div>
     <div id ="add-course">
-      <div id = "error"></div>
       <h1> Want to add a new course to your schedule? </h1>
+      <div id = "error"></div>
       <h3> It's easy! Just copy  and paste the link sent to you by your Instructor </h3>
       <input type="text" id ="link-input" placeholder = "Type or paste your link here">
       <button id = "enroll-button" onclick="joinCourse();">Enroll Now!</button>

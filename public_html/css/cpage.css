@@ -1,3 +1,10 @@
+/* Programmer: Aditya Kumar
+Project: QuickFeed
+For: course-page.html
+This is the css file that includes the
+styling for the course-page used by the
+instructors.
+*/
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap');
 
 * {
@@ -6,6 +13,7 @@
   scroll-behavior: smooth;
 }
 
+/* This makes scroll bar invisible */
 ::-webkit-scrollbar {
   display: none;
 }
@@ -15,6 +23,7 @@ body {
   overflow-y: scroll;
 }
 
+/* Particle Background */
 #particles-js {
   position: absolute;
   top: 15vh;
@@ -99,6 +108,7 @@ main h6 {
   font-size: 3vh;
 }
 
+/* General styling for the buttons */
 #switch {
   display: inline;
   position: relative;
@@ -106,6 +116,7 @@ main h6 {
   top: -12vh;
 }
 
+/* Copy buttons */
 #copy-button{
   position: absolute;
   left: -20vw;
@@ -123,7 +134,11 @@ main h6 {
 #copy-button:hover {
   background-color: #eeeeee;
 }
+
+/* Class on-off switch */
 #on-off {
+  position: absolute;
+  right: -19vw;
   background-color: white;
   font-size: 3vh;
   font-weight: 600;
@@ -139,6 +154,7 @@ main h6 {
   background-color: #eeeeee;
 }
 
+/* Daily feedback */
 #key-feedback{
   display: inline-block;
   position: absolute;
@@ -163,6 +179,7 @@ main h6 {
   font-weight: 600;
 }
 
+/* Student list */
 #student-list{
   display: inline-block;
   position: absolute;
@@ -172,6 +189,7 @@ main h6 {
   height: 57vh;
   background-color: #eeeeee;
   border-radius: 0.5vh;
+  overflow-y: scroll;
 }
 
 #student-list h1{
@@ -185,6 +203,7 @@ main h6 {
   border-top-right-radius: 0.5vh;
 }
 
+/* Entire semester feedback */
 .end-sem-feedback{
   display: inline-block;
   position: absolute;

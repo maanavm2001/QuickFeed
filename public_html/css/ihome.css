@@ -1,3 +1,9 @@
+/* Programmer: Aditya Kumar
+Project: QuickFeed
+For: instructor-homepage.html
+This is the css file that includes the
+styling for the homepage used by instructors.
+*/
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap');
 
 * {
@@ -6,6 +12,7 @@
   scroll-behavior: smooth;
 }
 
+/* invisible scroll bar */
 ::-webkit-scrollbar {
     display: none;
 }
@@ -15,6 +22,7 @@ body {
   overflow-y:scroll;
 }
 
+/* particle background */
 #particles-js {
   position: absolute;
   top: 20vh;
@@ -89,6 +97,8 @@ header {
 #intro h1{
   font-size: 7vh;
 }
+
+/* Main buttons */
 button {
   position: relative;
   left: 18%;
@@ -116,6 +126,7 @@ button:hover {
   left: 35vw;
 }
 
+/* Course gallery that contains all the course tiles */
 #course-gallery{
   position: absolute;
   top: 55vh;
@@ -133,14 +144,13 @@ button:hover {
 
 .course-tile{
   display: inline-block;
-  width:28vw;
-  height: 28vh;
+  height: 26vh;
   background-color: white;
-  margin-top: 4.25vh;
-  margin-left: 4vh;
-  margin-bottom: 4.25vh;
+  margin-top: 5.75vh;
+  margin-left: 1vw;
+  margin-right: 0.5vw;
+  margin-bottom: 5.75vh;
   border-radius: 2vh;
-  /* box-shadow: 2px 2px 10px black; */
 }
 
 .course-tile:hover{
@@ -148,22 +158,23 @@ button:hover {
   background-color: #eeeeee;
 }
 .course-tile h3{
-  font-size: 5vh;
-  padding-left: 2vh;
+  font-size: 2vw;
+  padding-left: 1vw;
   padding-top: 1.25vh;
 }
 .course-tile h4{
-  padding-left: 2vh;
+  padding-left: 1vw;
 }
 
+/* Student population section in the course tile */
 .student-pop{
   display: inline;
   position: relative;
-  top: 11.95vh;
-  padding-top: 2vh;
-  padding-bottom: 2vh;
-  padding-left: 2vh;
-  padding-right: 12.83vw;
+  top: 13.6vh;
+  padding-top: 1vw;
+  padding-bottom: 1vw;
+  padding-left: 1vw;
+  padding-right: 12.723vw;
   background-color: black;
   color: white;
   border-bottom-left-radius: 2vh;
