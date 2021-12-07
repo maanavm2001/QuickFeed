@@ -1,36 +1,47 @@
+<!-- Programmer: Aditya Kumar
+Project: QuickFeed - Easy Feedback
+Page: addcourse.html
+This is the page used by the instructors
+to add courses.
+-->
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>Add Course</title>
-    <link rel="stylesheet" href="css/add.css">
-  </head>
-  <body>
-    <div id="particles-js"></div>
-    <header>
-      <span id="logo"><a href="instructor-homepage.html">QuickFeed</a></span>
-      <nav id="nav-bar">
-        <li id="signup-button" class="nav-items">Sign Out</li>
-      </nav>
-    </header>
-    <div id = "add-course">
-      <h1>Create New Course</h1>
-      <div id="form-section">
-        <label for="name">Name</label>
-        <input type="text" id="name" required>
-        <label for="semester">Semester Name</label>
-        <input type="text" id="semester" required>
-        <label for="desciption">Description <i>(Optional)</i></label>
-        <textarea id="description" rows="5" cols="45"></textarea>
-        <button type="submit" name="Add Course"> Add Course </button>
-      </div>
-      <div id="link-section">
-        <h2>New Course added!</h2>
-        <h3>Now simply, copy this link and send it to your students</h3>
-        <h3 id ="link"> http://quickfeed.org/join/class/34343434344343</h3>
-      </div>
+
+<head>
+  <meta charset="utf-8">
+  <title>Add Course</title>
+  <link rel="stylesheet" href="css/add.css">
+</head>
+
+<body>
+  <div id="particles-js"></div>
+  <header>
+    <span id="logo"><a href="instructor-homepage.html">QuickFeed</a></span>
+    <nav id="nav-bar">
+      <li class="nav-items"><a href="help.html">Need Help?</a></li>
+      <li id="signup-button" class="nav-items">Sign Out</li>
+    </nav>
+  </header>
+  <div id="add-course">
+    <h1>Create New Course</h1>
+    <div id="form-section">
+      <label for="name">Name</label>
+      <input type="text" id="name" required>
+      <label for="semester">Semester Name</label>
+      <input type="text" id="semester" required>
+      <label for="desciption">Description <i>(Optional)</i></label>
+      <textarea id="description" rows="5" cols="45"></textarea>
+      <button type="submit" name="Add Course"> Add Course </button>
     </div>
-  </body>
-  <script type="text/javascript" src="js/particles.js"></script>
-  <script type="text/javascript" src="js/app.js"></script>
+    <!-- This section would remain hidden untill a course is created -->
+    <div id="link-section">
+      <h2>New Course added!</h2>
+      <h3>Now simply, copy this link and send it to your students</h3>
+      <h3 id="link"> http://quickfeed.org/join/class/34343434344343</h3>
+    </div>
+  </div>
+</body>
+<script type="text/javascript" src="js/particles.js"></script>
+<script type="text/javascript" src="js/app.js"></script>
+
 </html>

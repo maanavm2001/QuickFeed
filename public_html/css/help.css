@@ -1,8 +1,8 @@
 /* Programmer: Aditya Kumar
 Project: QuickFeed
-For: login.html
+For: help.html
 This is the css file that includes the
-styling for the course page that the student uses.
+styling for the help-page
 */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap');
 
@@ -11,33 +11,23 @@ styling for the course page that the student uses.
   font-family: 'Montserrat', sans-serif;
   scroll-behavior: smooth;
 }
-
+/* Invisible scroll bar */
 ::-webkit-scrollbar {
   display: none;
+}
+/* Particle background */
+#particles-js {
+  position: absolute;
+  top: 15vh;
+  height: 330vh;
+  width: 100vw;
+  background: white;
 }
 
 body {
   overflow-x: hidden;
   overflow-y: scroll;
-}
-
-#particles-js {
-  position: absolute;
-  top: 15vh;
-  height: 85vh;
-  width: 100vw;
-  background: white;
-}
-
-#not-live {
-  visibility: hidden;
-  position: absolute;
-  top: 15vh;
-  height: 75vh;
-  width: 100vw;
-  background: white;
   text-align: center;
-  padding-top: 10vh;
 }
 
 a {
@@ -97,83 +87,64 @@ header {
   transform-origin: bottom left;
 }
 
+p{
+  font-size: 3.5vh;
+  margin-left: 2.5vw;
+  padding-right: 1vw;
+  padding-bottom: 2vh;
+  font-weight: 500;
+  margin-right: 1.5vw;
+}
+
 main {
   position: absolute;
   top: 20vh;
-  width: 100vw;
 }
 
-main h1 {
-  position: relative;
-  top: -2vh;
-  left: 2vw;
-  font-size: 8vh;
+h1{
+    color: #564787;
+    margin-left: 2.5vw;
+    font-size: 8vh;
+    font-weight: 600;
+    text-align: left;
+    margin-bottom: 1vh;
 }
 
-main h6 {
-  position: relative;
-  top: -2vh;
-  left: 2.2vw;
-  font-size: 3vh;
+
+iframe{
+  display: block;
+  padding-left: 27vw;
+  padding-bottom: 5vh;
 }
 
-#course-status h1 {
+#page-heading{
+  display: block;
+  font-size: 9.5vh;
+  font-weight: 700;
+  padding-bottom: 3vh;
+  color: black;
   text-align: center;
+}
+
+#overview, .Instructions{
+  display: block;
+  text-align: left;
+}
+
+ h1:not(.heading, #page-heading){
   font-size: 4vh;
-  font-weight: 500;
+}
+ol{
+  margin-left: 2vw;
+  font-size: 3.5vh;
+  margin-right: 2vw;
+}
+li{
+  margin-bottom: 1vh;
 }
 
-/* live heading */
-.pulsate {
-  color: red;
-  font-weight: 550;
-  -webkit-animation: pulsate 3s ease-out;
-  -webkit-animation-iteration-count: infinite;
-  opacity: 0.5;
-}
-
-/* to make it pulsate */
-@-webkit-keyframes pulsate {
-  0% {
-    opacity: 0.5;
-  }
-
-  50% {
-    opacity: 1.0;
-  }
-
-  100% {
-    opacity: 0.5;
-  }
-}
-
-/* option tiles */
-.option {
-  display: inline-block;
-  height: 50vh;
-  width: 22vw;
-  margin: 2.75vh;
-  margin-top: 3.5vh;
+#last-tip{
+  color: black;
+  padding-right: 1vw;
   text-align: center;
-  background-color: white;
-  border: 1px solid black;
-  border-radius: 2vh;
-  /* box-shadow: 1px 1px 15px black; */
-}
-
-.option:hover {
-  background-color: #eeeeee;
-}
-
-.option h3 {
-  font-size: 4vh;
-  padding: 2vh;
-  background-color: #FFB563;
-  border-top-left-radius: 2vh;
-  border-top-right-radius: 2vh;
-}
-
-.option h4 {
-  margin-top: 14vh;
-  font-weight: 450;
 }

@@ -1,0 +1,91 @@
+<!-- Programmer: Aditya Kumar
+Project: QuickFeed - Easy Feedback
+Page: addcourse.html
+This is the page used by all users for tips,
+and it basically serves an in-help page for
+our website
+-->
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>Help</title>
+  <link rel="stylesheet" href="css/help.css">
+</head>
+
+<body>
+  <div id="particles-js"></div>
+  <header>
+    <span id="logo"><a href="index.html">QuickFeed</a></span>
+    <nav id="nav-bar">
+      <li class="nav-items"><a href="index.html">Home</a></li>
+      <li class="nav-items"><a href="index.html#contact">Contact Us</a></li>
+    </nav>
+  </header>
+  <main>
+    <h1 id="page-heading"> Help Page for QuickFeed </h1>
+    <!-- Video -->
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/RgCCuSH3yrM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen></iframe>
+    <div id="overview">
+      <h1 class="heading"> Brief Overview </h1>
+      <p> This website application is built towards an audience of students and professors/teachers. The application is designed to allow students to passively send constructive criticism/feedback to a lecturer, meaning there is minimal effort needed
+        by students to use this application.
+      </p>
+      <p> The goal of this application is for users to enter keystrokes/click a button to produce an automated message with a timestamp to be sent to the database. For example, if a user wanted to say “[LECTURER] is confusing at [TIMESTAMP] by
+        [USER]” or “[LECTURER] moved too fast at [TIMESTAMP] by [USER]” they would simply hit a key/click a button to send a message that auto-populates that field based off set config to the database. At the end of a lecture period all models of
+        messages in the database will be compiled/analyzed for a view by the professor through an email.
+      </p>
+    </div>
+    <div class="Instructions">
+      <h1 class="heading">How to use this web app? </h1>
+      <p>Even though we did our best to make this website user friendly, there can be stuff that still might be a little tricky to understand. Therefore, we have made this brief guide to help you out whenever and wherever you get stuck!</p>
+      <div id="Login-Signup-instr">
+        <h1> Login/Signup Steps(for both students and instructors)</h1>
+        <p> The process for login in to an accouny(or creating a new account), is pretty simple and is quite similar to the login sections of other websites. The only thing that the user should keep in mind is that they should not forget to
+          <b> check the option to use QuickFeed as an Instructor</b> in both Signup and login pages if they wish to use the added functionality that an instructor account would get. Also, instructors will not be able to login unless they select
+          the login as instructor option.
+        </p>
+        <p> The links to the signup and the login pages are present on the main home page(in both the navigation bar and the main body of the page), and also both the pages have links to each other.
+        </p>
+      </div>
+      <div id="Instructor">
+        <h1>Some Instructor Specific Tips/Instructions</h1>
+        <ol>
+          <li>When you login as an Instructor, then you are taken to a page called the "Instructor Homepage". From this homepage you can do tasks such as adding course, starting a class etc. Whenever you want to exit your Instructor homepage, you can
+            easily signout by clicking on the Signout button at the top right corner.</li>
+          <li>If you want to add a course, then click on its button in the instructor homepage, then it would take you to a new page where you would be required to enter a few details about the course. After you do that, click on the Create course
+            button
+            which would create the course for you.You would then be able to see a confirmation message along with a link that you can share with your students so that they can add themselves to your course. </li>
+          <li>If you want to see the feedback statistics for a particular course, then click on the that course's tile in the course section of the Instructor homepage, and then you would be taken to a new page which contains the all of the available
+            feedback
+            for the selected course</li>
+          <li>Also, on that page you would be able to see an option to copy the link to your clipboard, which you can do if you misplace the link to the class that was given to you when it was created. Most importantly, there is a button START/STOP
+            the class,
+            which is pretty important to use this app. <b>Please note: You can not receive feedback for a particular session until you start a class!</b>After a session ends, stop the class and you would get the feedback for that particular session,
+            along with the
+            the updated stats for the entire semester.</li>
+        </ol>
+      </div>
+      <div id="Student">
+        <h1>Some Student Specific Tips/Instructions</h1>
+        <ol>
+          <li>When you login as a Student, then you are taken to a page called the "Student Homepage". From this homepage you can do tasks such as adding course, giving feedback for a class etc. Whenever you want to exit your Student homepage, you
+            can
+            easily signout by clicking on the Signout button at the top right corner.</li>
+          <li>If you want to add a course, just enter the link that was given to you by your instructor in the respective section of the homepage. If the link is correct, then you would be enrolled in the course, else you would see an error message.
+            If you feel that your link is
+            correct and yet you are seeing an error, then check for any blank spaces else just contact your instructor. <b> Remember, links are case sensitive </b> </li>
+          <li>To give feedback for an active course, just click on its tile in courses section and you would be taken to a new page. If the course is live, then you would see multiple buttons on which you can click to give your feedback.</li>
+        </ol>
+      </div>
+      <h1 id="last-tip"><i>If you ever feel stuck, then just click on the <b>QuickFeed</b> logo and you would be taken to your respective homepage! </i></h1>
+    </div>
+  </main>
+
+</body>
+<script type="text/javascript" src="js/particles.js"></script>
+<script type="text/javascript" src="js/app.js"></script>
+
+</html>
