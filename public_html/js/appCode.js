@@ -65,7 +65,6 @@ function getCourseDetails() {
         if (data == 'FAIL') {
             alert('fail');
         } else {
-            console.log(data);
             currentCourse = JSON.parse(data);
             showCourseDetails();
         }
