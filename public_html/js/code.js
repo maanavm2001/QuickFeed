@@ -80,6 +80,6 @@ function loginTeacher() {
 }
 
 function showAlert() {
-    $('#error').text('There was an error! Please try again.');
+    $('#error').text('Error. Please try again.');
     $('#error').css("visibility", "visible");
 }
