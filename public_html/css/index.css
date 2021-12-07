@@ -169,7 +169,7 @@ main {
   position: absolute;
   top: 155vh;
   width: 100vw;
-  height: 55vh;
+  height: 59vh;
   background-color: #9AD4D6;
   color: black;
   text-align: center;
@@ -181,20 +181,27 @@ main {
   font-weight: 700
 }
 
-.empty-tile {
+.image-tile{
   display: inline-block;
   margin-top: 5vh;
   margin-left: 10vh;
   margin-right: 10vh;
+  font-size: 5vh;
+  font-weight: 600;
+
+}
+.creator {
+  display: block;
   height: 35vh;
   width: 35vh;
-  background-color: black;
+  margin-bottom: 2vh;
   border-radius: 35vh;
 }
 
+
 #contact {
   position: absolute;
-  top: 210vh;
+  top: 214vh;
   width: 100vw;
   height: 75vh;
   background-color: #101935;
