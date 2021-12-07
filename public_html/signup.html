@@ -1,3 +1,7 @@
+<!-- Programmer: Aditya Kumar
+Project: QuickFeed - Easy Feedback
+Page: signup.html
+This is the signup page for the website-->
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 
@@ -10,11 +14,14 @@
 </head>
 
 <body>
+  <!-- Particle background -->
   <div id='particles-js'></div>
+  <!-- Nav section -->
   <header>
     <span id="logo"><a href="index.html">QuickFeed</a></span>
     <nav id="nav-bar">
       <li class="nav-items"><a href="index.html">Home</a></li>
+      <li class="nav-items"><a href="help.html">Need Help?</a></li>
       <li class="nav-items"><a href="index.html#contact">Contact Us</a></li>
       <li id="login-button" class="nav-items"><a href="login.html">Login</a></li>
     </nav>
@@ -27,13 +34,14 @@
       </span>
       <span class="inner-box">
         <h2>Create Account</h2>
-        <div id="error"><br></div>
+        <div id="error"></div>
         <label for="name">Full Name</label>
         <input type="text" id="name" required>
         <label for="username">Email</label>
         <input type="email" id="email" required>
         <label for="pass">Password</label>
         <input type="password" id="pass" required>
+        <!-- Required for login purposes -->
         <label for="instructor">Sign up as an Instructor?</label>
         <input type="checkbox" id="instructor" name="instructor" required>
         <button type="button" id="Submit" onclick="createAccount();" class="contact-det" id="send">Sign Up</button>

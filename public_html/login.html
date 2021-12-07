@@ -1,3 +1,7 @@
+<!-- Programmer: Aditya Kumar
+Project: QuickFeed - Easy Feedback
+Page: login.html
+This is the login page for the website-->
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 
@@ -9,41 +13,45 @@
   <script src="js/code.js"></script>
 </head>
 
-<body id ="body">
-  <div id = 'particles-js'></div>
-    <header>
-      <span id="logo"><a href="index.html">QuickFeed</a></span>
-      <nav id="nav-bar">
-        <li class="nav-items"><a href="index.html">Home</a></li>
-        <li class="nav-items"><a href="index.html#contact">Contact Us</a></li>
-        <li id="login-button" class="nav-items"><a href="signup.html">Sign Up</a></li>
-      </nav>
-    </header>
-    <main>
-      <div class="outer-box">
-        <span class="outer-text">
-          <h1> Welcome Back </h1>
-          <h3> Easy Feedback, now at your wish.</h3>
-          <br><br>
-          <h3 id="signup"> New to QuickFeed? <a href="signup.html"> Sign up here! </a></h3>
-        </span>
-        <span class="inner-box">
-          <h2>Login</h2>
-          <br>
-          <div id="error"><br></div>
-          <label for="username">Email</label>
-          <input type="text" name="username" id="email" required>
-          <label for="pass">Password</label>
-          <input type="password" name="pass" id="pass" required>
-          <br>
-          <label for="instructor">Login as an Instructor?</label>
-          <input type="checkbox" id="instructor" name="instructor" required>
-          <button type="button" name="Submit" onclick="loginAccount();" class="contact-det" id="send">Login</button>
-        </span>
-    </main>
-  </div>
+<body id="body">
+  <!-- To add the particles background -->
+  <div id='particles-js'></div>
+  <!-- Nav section -->
+  <header>
+    <span id="logo"><a href="index.html">QuickFeed</a></span>
+    <nav id="nav-bar">
+      <li class="nav-items"><a href="index.html">Home</a></li>
+      <li class="nav-items"><a href="help.html">Need Help?</a></li>
+      <li class="nav-items"><a href="index.html#contact">Contact Us</a></li>
+      <li id="login-button" class="nav-items"><a href="signup.html">Sign Up</a></li>
+    </nav>
+  </header>
+  <main>
+    <div class="outer-box">
+      <span class="outer-text">
+        <h1> Welcome Back </h1>
+        <h3> Easy Feedback, now at your wish.</h3>
+        <br><br>
+        <h3 id="signup"> New to QuickFeed? <a href="signup.html"> Sign up here! </a></h3>
+      </span>
+      <span class="inner-box">
+        <h2>Login</h2>
+        <br>
+        <div id="error"></div>
+        <label for="username">Email</label>
+        <input type="text" name="username" id="email" required>
+        <label for="pass">Password</label>
+        <input type="password" name="pass" id="pass" required>
+        <br>
+        <label for="instructor">Login as an Instructor?</label>
+        <input type="checkbox" id="instructor" name="instructor" required>
+        <button type="button" name="Submit" onclick="loginAccount();" class="contact-det" id="send">Login</button>
+      </span>
+    </div>
+  </main>
+
   <script type="text/javascript" src="js/particles.js"></script>
-<script type="text/javascript" src="js/app.js"></script>
+  <script type="text/javascript" src="js/app.js"></script>
 </body>
 
 </html>
