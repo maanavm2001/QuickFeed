@@ -12,6 +12,8 @@ to start a particular class
   <meta charset="utf-8">
   <title>Course Page</title>
   <link rel="stylesheet" href="css/cpage.css">
+  <script src="js/jquery.js"></script>
+  <script src="js/teacherCourse.js"></script>
 </head>
 
 <body>
@@ -21,17 +23,17 @@ to start a particular class
     <!-- Navigation section -->
     <nav id="nav-bar">
       <li class="nav-items"><a href="help.html">Need Help?</a></li>
-      <li id="signup-button" class="nav-items">Sign Out</li>
+      <li id="signup-button" class="nav-items" onclick="signOut();">Sign Out</li>
     </nav>
   </header>
   <main>
-    <span id="course-name">
-      <h1>Random Course </h1>
-      <h6>Random Semester </h6>
+    <span>
+      <h1 id="course-name"></h1>
+      <h6 id="semester-name"></h6>
     </span>
     <!-- Button section -->
     <span id="switch">
-      <button id ="copy-button">Copy Class Link</button>
+      <button class="js-copy-bob-btn" id ="copy-button">Copy Class Link</button>
       <button id = "on-off">Start Class</button>
     </span>
   </main>
@@ -48,5 +50,6 @@ to start a particular class
 </body>
 <script type="text/javascript" src="js/particles.js"></script>
 <script type="text/javascript" src="js/app.js"></script>
+<script> getCourseDetails(); </script>
 
 </html>

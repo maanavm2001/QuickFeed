@@ -221,3 +221,9 @@ main h6 {
   text-align: center;
   top: 2vh;
 }
+
+.student-name {
+  padding-left: 2vw;
+  padding-top: 2vw;
+  font-size: x-large;
+}

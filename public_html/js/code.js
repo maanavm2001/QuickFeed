@@ -1,4 +1,9 @@
 
+function getUsername() {
+    let x = decodeURIComponent(document.cookie);
+    console.log(x);
+    return x;
+}
 
 function createAccount() {
     let isInstructor = $('#instructor');
@@ -20,7 +25,7 @@ function createStudentAccount() {
         password: password,
         email: email
     }, (data, status) => {
-        alert(data);
+        showAlert();
     });
 }
 
@@ -35,7 +40,7 @@ function createTeacherAccount() {
         password: password,
         email: email
     }, (data, status) => {
-        alert(data);
+        showAlert();
     })
 }
 
@@ -54,9 +59,9 @@ function loginStudent() {
     let pass = $('#pass').val();
     $.get('/account/student/login/' + email + '/' + pass, (data, status) => {
         if (data == 'SUCCESS') {
-            window.location.href = '/instructor-homepage.html';
+            window.location.href = '/student-homepage.html';
         } else {
-            alert(data);
+            showAlert()
         }
     })
 }
@@ -69,7 +74,12 @@ function loginTeacher() {
         if (data == 'SUCCESS') {
             window.location.href = '/instructor-homepage.html';
         } else {
-            alert(data);
+            showAlert();
         }
     })
+}
+
+function showAlert() {
+    $('#error').text('Error. Please try again.');
+    $('#error').css("visibility", "visible");
 }

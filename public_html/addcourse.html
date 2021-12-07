@@ -6,33 +6,33 @@ to add courses.
 -->
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-
-<head>
-  <meta charset="utf-8">
-  <title>Add Course</title>
-  <link rel="stylesheet" href="css/add.css">
-</head>
-
-<body>
-  <div id="particles-js"></div>
-  <header>
-    <span id="logo"><a href="instructor-homepage.html">QuickFeed</a></span>
-    <nav id="nav-bar">
-      <li class="nav-items"><a href="help.html">Need Help?</a></li>
-      <li id="signup-button" class="nav-items">Sign Out</li>
-    </nav>
-  </header>
-  <div id="add-course">
-    <h1>Create New Course</h1>
-    <div id="form-section">
-      <label for="name">Name</label>
-      <input type="text" id="name" required>
-      <label for="semester">Semester Name</label>
-      <input type="text" id="semester" required>
-      <label for="desciption">Description <i>(Optional)</i></label>
-      <textarea id="description" rows="5" cols="45"></textarea>
-      <button type="submit" name="Add Course"> Add Course </button>
-    </div>
+  <head>
+    <meta charset="utf-8">
+    <title>Add Course</title>
+    <link rel="stylesheet" href="css/add.css">
+    <script src="js/jquery.js"></script>
+    <script src="js/teacherCreate.js"></script>
+  </head>
+  <body>
+    <div id="particles-js"></div>
+    <header>
+      <span id="logo"><a href="instructor-homepage.html">QuickFeed</a></span>
+      <nav id="nav-bar">
+        <li class="nav-items"><a href="help.html">Need Help?</a></li>
+        <li id="signup-button" class="nav-items" onclick="signOut();">Sign Out</li>
+      </nav>
+    </header>
+    <div id = "add-course">
+      <h1>Create New Course</h1>
+      <div id="form-section">
+        <label for="name">Name</label>
+        <input type="text" id="name" required>
+        <label for="semester">Semester Name</label>
+        <input type="text" id="semester" required>
+        <label for="desciption">Description <i>(Optional)</i></label>
+        <textarea id="description" rows="5" cols="45"></textarea>
+        <button type="submit" name="Add Course" onclick="createCourse();"> Add Course </button>
+      </div>
     <!-- This section would remain hidden untill a course is created -->
     <div id="link-section">
       <h2>New Course added!</h2>
