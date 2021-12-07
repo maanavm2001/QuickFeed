@@ -235,9 +235,9 @@ app.get('/account/student/login/:email/:password', async(req, res) => {
                     var sessionKey = putSession(results._id);
                     res.cookie("login", { user: results, key: sessionKey }, { maxAge: TIMEOUT });
                     res.end('SUCCESS');
-                } else { res.end("wrong password") }
+                } else { res.end('FAIL') }
             } else {
-                res.end('There was an issue logging in please try again');
+                res.end('FAIL');
             }
         })
 })
@@ -269,8 +269,8 @@ app.post('/account/teacher/create', async(req, res) => {
                 });
                 newTeacher.save(
                     function(err) {
-                        if (err) { return res.end("Error teacher user not made/not saved") }
-                        res.end('Teacher created!');
+                        if (err) { return res.end('FAIL') }
+                        res.end('SUCCESS');
                     });
             }
         })
@@ -293,9 +293,9 @@ app.get('/account/teacher/login/:email/:password', async(req, res) => {
                     var sessionKey = putSession(results._id);
                     res.cookie("login", { user: results, key: sessionKey }, { maxAge: TIMEOUT });
                     res.end('SUCCESS');
-                } else { res.end("wrong password") }
+                } else { res.end('FAIL') }
             } else {
-                res.end('There was an issue logging in please try again');
+                res.end('FAIL');
             }
         })
 })
@@ -462,7 +462,7 @@ app.get('/clear/database', async(req, res) => {
 
 app.get('/app/class/message/:type', async(req, res) => {
     const session = req.cookies.session;
-    let u = req.cookies.login.username;
+    let u = req.cookies.login.user;
     currSession = Session.find({ _id: session })
     currClass = currSession.class;
     Class.find({ classname: currClass }).exec(function(err, res) {
@@ -488,7 +488,7 @@ app.get('/app/class/message/:type', async(req, res) => {
                     results.mesasges.push(newMesssage._id)
                     results.save().exec(function(err) { if (err) { res.end('error') } })
                 })
-                Student.find({ username: res.student }).exec(function(err, results) {
+                Student.find({ _id: u._id }).exec(function(err, results) {
                     if (err) {
                         res.end("error")
                     }

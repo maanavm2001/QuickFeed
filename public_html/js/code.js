@@ -25,7 +25,7 @@ function createStudentAccount() {
         password: password,
         email: email
     }, (data, status) => {
-        showAlert();
+        showAlert(data);
     });
 }
 
@@ -40,7 +40,7 @@ function createTeacherAccount() {
         password: password,
         email: email
     }, (data, status) => {
-        showAlert();
+        showAlert(data);
     })
 }
 
@@ -61,7 +61,7 @@ function loginStudent() {
         if (data == 'SUCCESS') {
             window.location.href = '/student-homepage.html';
         } else {
-            showAlert()
+            showAlert(data)
         }
     })
 }
@@ -74,12 +74,17 @@ function loginTeacher() {
         if (data == 'SUCCESS') {
             window.location.href = '/instructor-homepage.html';
         } else {
-            showAlert();
+            showAlert(data);
         }
     })
 }
 
-function showAlert() {
-    $('#error').text('Error. Please try again.');
-    $('#error').css("visibility", "visible");
+function showAlert(alert) {
+    if (alert == 'FAIL') {
+        $('#error').text('Error. Please try again.');
+        $('#error').css("visibility", "visible");
+    } else {
+        //$('#error').text('Success!');
+        //$('#')
+    }
 }
