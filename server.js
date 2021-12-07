@@ -306,14 +306,14 @@ app.get('/account/signout/:userID', (req, res) => {
 })
 
 app.get('/account/course/:courseID', (req, res) => {
-    console.log(req.params);
     Class.findOne({ _id: req.params.courseID })
+    .populate('students')
+    .populate('messages')
+    .lean()
     .exec(function(err, result) {
         if (err) {
-            console.log(err);
             res.end("FAIL");
         } else {
-            console.log(result);
             res.end(JSON.stringify(result));
         }
     })
@@ -326,7 +326,6 @@ app.get('/account/course/:courseID', (req, res) => {
 */
 
 app.post('/app/student/class/join', async(req, res) => {
-    console.log('here');
     let studentID = req.cookies.login.user._id;
     let reqData = req.body;
     let courseID = reqData.courseID;
@@ -461,7 +460,7 @@ app.get('/clear/database', async(req, res) => {
 
 })
 
-app.get('/app/class/:type', async(req, res) => {
+app.get('/app/class/message/:type', async(req, res) => {
     const session = req.cookies.session;
     let u = req.cookies.login.username;
     currSession = Session.find({ _id: session })

@@ -102,7 +102,6 @@ function signOut() {
 function showCourseDetails() {
     $('#course-name').text(currentCourse.name);
     $('#semester-name').text(currentCourse.semestername);
-
 }
 
 $(document).ready(function() {

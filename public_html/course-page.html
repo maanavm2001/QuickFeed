@@ -6,7 +6,7 @@
   <title>Course Page</title>
   <link rel="stylesheet" href="css/cpage.css">
   <script src="js/jquery.js"></script>
-  <script src="js/appCode.js"></script>
+  <script src="js/teacherCourse.js"></script>
 </head>
 
 <body>
@@ -14,16 +14,16 @@
   <header>
     <span id="logo"><a href="instructor-homepage.html">QuickFeed</a></span>
     <nav id="nav-bar">
-      <li id="signup-button" class="nav-items">Sign Out</li>
+      <li id="signup-button" class="nav-items" onclick="signOut();">Sign Out</li>
     </nav>
   </header>
   <main>
     <span>
-      <h1 id="course-name">Random Course </h1>
-      <h6 id="semester-name">Random Semester </h6>
+      <h1 id="course-name"></h1>
+      <h6 id="semester-name"></h6>
     </span>
     <span id="switch">
-      <button id ="copy-button">Copy Class Link</button>
+      <button class="js-copy-bob-btn" id ="copy-button">Copy Class Link</button>
       <button id = "on-off">Start Class</button>
     </span>
   </main>
