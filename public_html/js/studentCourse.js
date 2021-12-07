@@ -22,9 +22,11 @@ function showCourseDetails() {
 }
 
 function sendMessage(messageType) {
+    console.log('button pressed');
     $.post('/app/class/message/:type'), {
         type: messageType
     }, (data, status) => {
+        console.log(data);
         showAlert(data);
     }
 }
