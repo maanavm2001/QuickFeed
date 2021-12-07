@@ -22,7 +22,13 @@ function showCourseDetails() {
 }
 
 function sendMessage(messageType) {
-    //$.post()
+    console.log('button pressed');
+    $.post('/app/class/message/:type'), {
+        type: messageType
+    }, (data, status) => {
+        console.log(data);
+        showAlert(data);
+    }
 }
 
 function signOut() {
@@ -45,3 +51,31 @@ function getCourseDetails() {
         }
     })
 }
+
+function showAlert(alert) {
+    if (alert == 'FAIL') {
+        $('#error').text("Error saving message.");
+        $('#error').css('visibility', 'visible');
+    } else {
+        $('#error').text('Message saved!')
+    }
+}
+
+function buttonSetup() {
+    $('#ts').click(function() {
+        sendMessage('S');
+    })
+    $('#tf').click(function() {
+        sendMessage('F');
+    })
+    $('#conf').click(function() {
+        sendMessage('C');
+    })
+    $('#gj').click(function() {
+        sendMessage('G');
+    })
+}
+
+$(document).ready(function() {
+    buttonSetup();
+})

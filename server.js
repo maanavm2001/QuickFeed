@@ -163,9 +163,29 @@ function startClassSession(currClass, req) {
     currTime++;
     var d = new Date();
     var NoTimeDate = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate();
-    sessionClass = Class.find({ classname: currClass }).exec(function(err, res) {
-        if (err) { res.end('Error class may not exist.') }
-    });
+    sessionClass = Class.find({ classname: currClass })
+
+    Class.findOne({ _id: currClass._id})
+    .exec(function(err, res) {
+        var classSession = new Session({
+            active: true,
+            date: NoTimeDate,
+            class: res._id
+        })
+        classSession.save(function(err) {
+            if (!err) {
+                res.sessions.push(classSession._id);
+                res.save();
+                req.cookies.session = res._id;
+            }
+        })
+
+    })
+    setInterval(secondUp, 1000)
+    /*
+    //.exec(function(err, res) {
+    //    if (err) { res.end('Error class may not exist.') }
+    //});
     var classSession = new Session({
         active: true,
         date: NoTimeDate,
@@ -180,6 +200,7 @@ function startClassSession(currClass, req) {
 
     });
     setInterval(secondUp, 1000)
+    */
 }
 
 ///////////
@@ -239,6 +260,14 @@ app.get('/account/get/teachers', async(req, res) => {
         })
 })
 
+app.get('/account/get/messages', async(req, res) => {
+    Message.find()
+        .exec(function(err, results) {
+            if (err) return handleError(err);
+            res.end(JSON.stringify(results));
+        })
+})
+
 app.get('/account/get/classes', async(req, res) => {
     Class.find()
         .exec(function(err, results) {
@@ -263,9 +292,9 @@ app.get('/account/student/login/:email/:password', async(req, res) => {
                     var sessionKey = putSession(results._id);
                     res.cookie("login", { user: results, key: sessionKey }, { maxAge: TIMEOUT });
                     res.end('SUCCESS');
-                } else { res.end("wrong password") }
+                } else { res.end('FAIL') }
             } else {
-                res.end('There was an issue logging in please try again');
+                res.end('FAIL');
             }
         })
 })
@@ -297,8 +326,8 @@ app.post('/account/teacher/create', async(req, res) => {
                 });
                 newTeacher.save(
                     function(err) {
-                        if (err) { return res.end("Error teacher user not made/not saved") }
-                        res.end('Teacher created!');
+                        if (err) { return res.end('FAIL') }
+                        res.end('SUCCESS');
                     });
             }
         })
@@ -321,9 +350,9 @@ app.get('/account/teacher/login/:email/:password', async(req, res) => {
                     var sessionKey = putSession(results._id);
                     res.cookie("login", { user: results, key: sessionKey }, { maxAge: TIMEOUT });
                     res.end('SUCCESS');
-                } else { res.end("wrong password") }
+                } else { res.end('FAIL') }
             } else {
-                res.end('There was an issue logging in please try again');
+                res.end('FAIL');
             }
         })
 })
@@ -447,29 +476,36 @@ app.get('/app/student/classes/:studentID', async(req, res) => {
 
 
 app.get('/app/:class/start', async(req, res) => {
+    console.log('hello');
     const currClass = req.params.class;
+    console.log(currClass);
 
-    startClass = Class.find({ classname: currClass }).exec(function(err, res) {
-        if (err) { res.end('Error class may not exist.') }
-    });
-    startClass.active = true;
-    startClass.save().exec(function(err) { if (err) { res.end("Couldn't start") } });
+    Class.findOne({ _id: currClass })
+        .exec(function(err, res) {
+            if (err) { res.end('FAIL') }
+            res.active = true;
+            res.save()
+            console.log(res);
+            startClassSession(res, req)
+        })
+    //startClass.active = true;
+    //startClass.save().exec(function(err) { if (err) { res.end('FAIL') } });
 
-    startClassSession(currClass, req)
-    res.end('Class started')
+    //startClassSession(currClass, req)
+    res.end('SUCCESS')
 })
 
 app.get('/app/:class/stop', async(req, res) => {
     const currClass = req.params.class;
 
     startClass = Class.find({ classname: currClass }).exec(function(err, res) {
-        if (err) { res.end('Error class may not exist.') }
+        if (err) { res.end('FAIL') }
     });
     startClass.active = false;
-    startClass.save().exec(function(err) { if (err) { res.end("Couldn't end") } });
+    startClass.save().exec(function(err) { if (err) { res.end('FAIL') } });
 
     stopClassSession()
-    res.end('Class ended')
+    res.end('SUCCESS')
 })
 
 app.get('/clear/database', async(req, res) => {
@@ -488,7 +524,7 @@ app.get('/clear/database', async(req, res) => {
 
 })
 
-app.get('/app/class/message/:type', async(req, res) => {
+app.post('/app/class/message/:type', async(req, res) => {
     const session = req.cookies.session;
     let u = req.cookies.login.user;
     currSession = Session.find({ _id: session })
@@ -514,17 +550,17 @@ app.get('/app/class/message/:type', async(req, res) => {
                         res.end("error")
                     }
                     results.mesasges.push(newMesssage._id)
-                    results.save().exec(function(err) { if (err) { res.end('error') } })
+                    results.save().then(function(err) { if (err) { res.end('error') } })
                 })
                 Student.findOne({ _id: u._id }).exec(function(err, results) {
                     if (err) {
                         res.end("error")
                     }
                     results.mesasges.push(newMesssage._id)
-                    results.save().exec(function(err) { if (err) { res.end('error') } })
+                    results.save().then(function(err) { if (err) { res.end('error') } })
                 })
                 currSession.mesasges.push(newMessage._id);
-                currSession.save().exec(function(err) { if (err) { res.end('error') } })
+                currSession.save().then(function(err) { if (err) { res.end('error') } })
             })
         } else { res.end('class not active') }
     })

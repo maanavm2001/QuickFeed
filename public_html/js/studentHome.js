@@ -43,7 +43,15 @@ function joinCourse() {
     });
 }
 
+function signOut() {
+    $.get('/account/signout/' + user._id, (data, status) => {
+        window.location.href = data;
+    })
+}
 
+$(document).ready(function() {
+    $('#username').text(user.name);
+})
 
 function goToCoursePage(courseID) {
     window.location.href = 'student-course-page.html?classID=' + courseID;

@@ -21,6 +21,7 @@ function getCourseDetails() {
             showCourseDetails();
             showStudents(course.students);
             setCopyButton();
+            buttonSetup();
         }
     })
 }
@@ -54,6 +55,49 @@ function setCopyButton() {
       });
 }
 
+function startClass() {
+    $.get('/app/' + course._id + '/start'), (data, status) => {
+        console.log(data);
+        if (data == 'FAIL') {
+            alert('FAILURE')
+        } else {
+            course.active = true;
+            changeButton();
+        }
+    }   
+}
+
+function stopClass() {
+    $.get('/app/' + course._id + '/stop'), (data, status) => {
+        if (data == 'FAIL') {
+            alert("FAILURE")
+        } else {
+            course.active = false;
+            changeButton();
+        }
+    }
+}
+
+function changeButton() {
+    if (course.active == false) {
+        $('on-off').css('background-color', 'red');
+        $('on-off').text('Stop Class');
+    } else {
+        $('on-off').css('background-color', 'white');
+        $('on-off').text('Start Class');
+    }
+}
+
+function buttonSetup() {
+    $('#on-off').click(function() {
+        console.log("heelo");
+        if (course.active == true) {
+            stopClass();
+        } else {
+            startClass();
+        }
+    })
+}
 
 
 function copyTextToClipboard(text) {
