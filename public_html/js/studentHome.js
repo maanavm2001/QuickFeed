@@ -3,6 +3,7 @@ var user = getUser();
 
 function getUser() {
     let x = decodeURIComponent(document.cookie);
+    console.log(x);
     x = JSON.parse(x.split(':').slice(1).join(':')).user;
     return x;
 }

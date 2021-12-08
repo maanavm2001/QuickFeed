@@ -1,9 +1,4 @@
 
-function getUsername() {
-    let x = decodeURIComponent(document.cookie);
-    console.log(x);
-    return x;
-}
 
 function createAccount() {
     let isInstructor = $('#instructor');
@@ -84,7 +79,8 @@ function showAlert(alert) {
         $('#error').text('Error. Please try again.');
         $('#error').css("visibility", "visible");
     } else {
-        //$('#error').text('Success!');
-        //$('#')
+        $('#error').text('Success!');
+        $('#error').css("visibility", "visible");
+        $('#error').css('color', 'green');
     }
 }

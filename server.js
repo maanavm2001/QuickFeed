@@ -9,7 +9,7 @@ const parser = require('body-parser')
 const cookieParser = require('cookie-parser');
 const crypto = require('crypto');
 var nodemailer = require('nodemailer');
-const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4, NIL } = require('uuid');
 
 ////////////////////
 ////SESSION CODE////
@@ -102,6 +102,7 @@ var counter;
 // User authenticate
 function authenticate(req, res, next) {
     if (Object.keys(req.cookies).length > 0) {
+        console.log(req.cookies);
         let u = req.cookies.login.user;
         let key = req.cookies.login.key;
         if (isValidSession(u._id, key)) {
@@ -149,9 +150,7 @@ function getTimeStamp() {
 }
 
 
-function email() {
-    let u = req.cookies.login.user;
-    let currSession = req.cookies.session.session;
+function email(u, currSession) {
     let body = '';
     emailTo = u.email;
 
@@ -178,14 +177,17 @@ function email() {
     });
 }
 
-function stopClassSession() {
+function stopClassSession(user, currSession, _callback) {
     clearInterval(counter);
-    let currSession = req.cookies.session.session;
+    
     Session.findOne({ _id: currSession._id }).exec(function(err, results) {
-        if (err) { res.end('couldnt find/error') }
-        result.active = false;
-        result.save()
-        email()
+        //if (err) { res.end('couldnt find/error') }
+        if (err) {
+            _callback(err);
+        }
+        results.active = false;
+        results.save(_callback(err));
+        email(user, currSession);
     })
 }
 
@@ -193,7 +195,7 @@ function secondUp() {
     currTime++
 }
 
-function startClassSession(currClass, req) {
+function startClassSession(currClass, _callback) {
     currTime++;
     var d = new Date();
     var NoTimeDate = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate();
@@ -201,17 +203,21 @@ function startClassSession(currClass, req) {
     var classSession = new Session({
         active: true,
         date: NoTimeDate,
-        class: res._id
+        class: currClass._id
     })
 
     classSession.save()
 
     Class.findOne({ _id: currClass._id }).exec(function(err, result) {
-        if (err) { res.end('class not found/error') }
+        if (err) {
+            _callback(err, result);
+            return;
+        }
+        //if (err) { res.end('class not found/error') }
         addSessionToClass(currClass._id, classSession._id, function(err, res) {
-            if (err) { res.end('error adding seeion to class') }
+            _callback(err, classSession);
         })
-        res.cookie("session", { session: classSession }, { maxAge: TIMEOUT });
+        //res.cookie("session", { session: classSession }, { maxAge: TIMEOUT });
     })
     counter = setInterval(secondUp, 1000)
 }
@@ -406,7 +412,6 @@ app.post('/app/student/class/join', async(req, res) => {
         } else {
             addClassToStudent(courseID, studentID, function(err, response) {
                 if (err) res.end('FAIL');
-                console.log('here2');
                 res.end('/student-homepage.html');
             })
         }
@@ -449,7 +454,6 @@ app.post('/app/teacher/class/create', async(req, res) => {
                                     else { res.end('SUCCESS!'); }
                                 });
                             });
-                        console.log(newClass._id);
                         res.end(newClass._id.toString());
                     });
             }
@@ -489,6 +493,7 @@ app.get('/app/student/classes/:studentID', async(req, res) => {
 
 
 app.get('/app/:class/start', async(req, res) => {
+    console.log('start class');
     const currClass = req.params.class;
 
     Class.findOne({ _id: currClass })
@@ -496,22 +501,33 @@ app.get('/app/:class/start', async(req, res) => {
             if (err) { res.end('FAIL') }
             result.active = true;
             result.save()
-            startClassSession(result, req)
+            startClassSession(result, function(err, classSession) {
+                if (err) {
+                    res.end('FAIL');
+                }
+                res.cookie("session", { session: classSession }, { maxAge: TIMEOUT });;
+                res.end('SUCCESS');
+            });
         })
-    res.end('SUCCESS')
 })
 
 app.get('/app/:class/stop', async(req, res) => {
+    console.log('stop class');
     const currClass = req.params.class;
-
+    let currSession = req.cookies.session.session;
+    let user = req.cookies.login.user;
+    
     Class.findOne({ _id: currClass })
         .exec(function(err, result) {
+
             if (err) { res.end('FAIL') }
             result.active = false;
             result.save()
-            stopClassSession(result, req)
+            stopClassSession(user, currSession, function(err) {
+                if (err) { res.end('FAIL'); }
+                res.end('SUCCESS');
+            })
         })
-    res.end('SUCCESS')
 })
 
 app.get('/clear/database', async(req, res) => {

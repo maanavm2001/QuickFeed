@@ -3,7 +3,11 @@ var course;
 
 
 function getUser() {
-    let x = decodeURIComponent(document.cookie);
+    const cookieValue = document.cookie
+    .split('; ')
+    .find(row => row.startsWith('login='))
+    .split('=')[1]
+    let x = decodeURIComponent(cookieValue);
     x = JSON.parse(x.split(':').slice(1).join(':')).user;
     return x;
 }
@@ -57,12 +61,12 @@ function setCopyButton() {
 
 function startClass() {
     $.get('/app/' + course._id + '/start'), (data, status) => {
-        console.log(data);
         if (data == 'FAIL') {
             alert('FAILURE')
         } else {
             course.active = true;
             changeButton();
+            location.reload();
         }
     }   
 }
@@ -74,23 +78,24 @@ function stopClass() {
         } else {
             course.active = false;
             changeButton();
+            location.reload();
         }
     }
 }
 
 function changeButton() {
-    if (course.active == false) {
-        $('on-off').css('background-color', 'red');
-        $('on-off').text('Stop Class');
+    if (course.active == true) {
+        $('#on-off').css('background-color', 'red');
+        $('#on-off').text('Stop Class');
     } else {
-        $('on-off').css('background-color', 'white');
-        $('on-off').text('Start Class');
+        $('#on-off').css('background-color', 'white');
+        $('#on-off').text('Start Class');
     }
 }
 
 function buttonSetup() {
+    changeButton();
     $('#on-off').click(function() {
-        console.log("heelo");
         if (course.active == true) {
             stopClass();
         } else {
