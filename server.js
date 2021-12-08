@@ -98,7 +98,7 @@ var Message = require('./models/Message');
 var Session = require('./models/Session');
 
 var currTime = 0;
-
+var counter;
 // User authenticate
 function authenticate(req, res, next) {
     if (Object.keys(req.cookies).length > 0) {
@@ -148,11 +148,45 @@ function getTimeStamp() {
     return hours + ':' + minutes + ':' + seconds;
 }
 
+
+function email() {
+    let u = req.cookies.login.user;
+    let currSession = req.cookies.session.session;
+    let body = '';
+    emailTo = u.email;
+
+    Session.findOne({ _id: currSession._id })
+        .exec(function(err, results) {
+            if (err) return handleError(err);
+            body = JSON.stringify(results);
+        })
+
+    var mailOptions = {
+        from: 'quickfeedteam@gmail.com',
+        to: String(emailTo),
+        subject: 'Today\'s Session Detail',
+        text: String(body)
+    };
+
+    transporter.sendMail(mailOptions, function(error, info) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+            currTime = 0
+        }
+    });
+}
+
 function stopClassSession() {
-    const session = req.cookies.session;
-
-
-    currTime = 0;
+    clearInterval(counter);
+    let currSession = req.cookies.session.session;
+    Session.findOne({ _id: currSession._id }).exec(function(err, results) {
+        if (err) { res.end('couldnt find/error') }
+        result.active = false;
+        result.save()
+        email()
+    })
 }
 
 function secondUp() {
@@ -163,44 +197,23 @@ function startClassSession(currClass, req) {
     currTime++;
     var d = new Date();
     var NoTimeDate = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate();
-    sessionClass = Class.find({ classname: currClass })
 
-    Class.findOne({ _id: currClass._id})
-    .exec(function(err, res) {
-        var classSession = new Session({
-            active: true,
-            date: NoTimeDate,
-            class: res._id
-        })
-        classSession.save(function(err) {
-            if (!err) {
-                res.sessions.push(classSession._id);
-                res.save();
-                req.cookies.session = res._id;
-            }
-        })
-
-    })
-    setInterval(secondUp, 1000)
-    /*
-    //.exec(function(err, res) {
-    //    if (err) { res.end('Error class may not exist.') }
-    //});
     var classSession = new Session({
         active: true,
         date: NoTimeDate,
-        class: sessionClass._id,
-    });
+        class: res._id
+    })
 
-    classSession.save().exec(function(err, res) {
-        if (err) { res.end("Could not save session") }
-        sessionClass.sessions.push(res._id)
-        sessionClass.save().exec(function(err) { if (err) { res.end('error') } })
-        req.cookies.session = res._id
+    classSession.save()
 
-    });
-    setInterval(secondUp, 1000)
-    */
+    Class.findOne({ _id: currClass._id }).exec(function(err, result) {
+        if (err) { res.end('class not found/error') }
+        addSessionToClass(currClass._id, classSession._id, function(err, res) {
+            if (err) { res.end('error adding seeion to class') }
+        })
+        res.cookie("session", { session: classSession }, { maxAge: TIMEOUT });
+    })
+    counter = setInterval(secondUp, 1000)
 }
 
 ///////////
@@ -476,35 +489,28 @@ app.get('/app/student/classes/:studentID', async(req, res) => {
 
 
 app.get('/app/:class/start', async(req, res) => {
-    console.log('hello');
     const currClass = req.params.class;
-    console.log(currClass);
 
     Class.findOne({ _id: currClass })
-        .exec(function(err, res) {
+        .exec(function(err, result) {
             if (err) { res.end('FAIL') }
-            res.active = true;
-            res.save()
-            console.log(res);
-            startClassSession(res, req)
+            result.active = true;
+            result.save()
+            startClassSession(result, req)
         })
-    //startClass.active = true;
-    //startClass.save().exec(function(err) { if (err) { res.end('FAIL') } });
-
-    //startClassSession(currClass, req)
     res.end('SUCCESS')
 })
 
 app.get('/app/:class/stop', async(req, res) => {
     const currClass = req.params.class;
 
-    startClass = Class.find({ classname: currClass }).exec(function(err, res) {
-        if (err) { res.end('FAIL') }
-    });
-    startClass.active = false;
-    startClass.save().exec(function(err) { if (err) { res.end('FAIL') } });
-
-    stopClassSession()
+    Class.findOne({ _id: currClass })
+        .exec(function(err, result) {
+            if (err) { res.end('FAIL') }
+            result.active = false;
+            result.save()
+            stopClassSession(result, req)
+        })
     res.end('SUCCESS')
 })
 
@@ -576,6 +582,14 @@ function addClassToStudent(classID, studentID, _callback) {
 
 function addStudentToClass(classID, studentID, _callback) {
     Class.updateOne({ _id: classID }, { $push: { students: studentID } },
+        function(err, response) {
+            _callback(err, response);
+        }
+    )
+}
+
+function addSessionToClass(classID, sessionID, _callback) {
+    Class.updateOne({ _id: classID }, { $push: { sessions: sessionID } },
         function(err, response) {
             _callback(err, response);
         }
