@@ -117,22 +117,21 @@ function authenticate(req, res, next) {
     }
 }
 
-function buildMessage(code, timeStamp) {
+function buildMessage(code, name) {
     finalstring = ''
     timeStamp = getTimeStamp();
-    let u = req.cookies.login.user;
 
     if (code == 'q' || code == 'Q') {
-        finalstring += 'At ' + String(timeStamp) + +' ' + String(u.name) + ' found you confusing!'
+        finalstring += 'At ' + String(timeStamp) + +' ' + String(name) + ' found you confusing!'
     }
     if (code == 's' || code == 'S') {
-        finalstring += 'At ' + String(timeStamp) + +' ' + String(u.name) + ' found you moving slow!'
+        finalstring += 'At ' + String(timeStamp) + +' ' + String(name) + ' found you moving slow!'
     }
     if (code == 'f' || code == 'F') {
-        finalstring += 'At ' + String(timeStamp) + +' ' + String(u.name) + ' found you moving too fast!'
+        finalstring += 'At ' + String(timeStamp) + +' ' + String(name) + ' found you moving too fast!'
     }
     if (code == 'g' || code == 'G') {
-        finalstring += 'At ' + String(timeStamp) + +' ' + String(u.name) + ' thought you were explaing well!'
+        finalstring += 'At ' + String(timeStamp) + +' ' + String(name) + ' thought you were explaing well!'
     }
 
     return finalstring;
@@ -179,7 +178,7 @@ function email(u, currSession) {
 
 function stopClassSession(user, currSession, _callback) {
     clearInterval(counter);
-    
+
     Session.findOne({ _id: currSession._id }).exec(function(err, results) {
         //if (err) { res.end('couldnt find/error') }
         if (err) {
@@ -215,9 +214,9 @@ function startClassSession(currClass, _callback) {
         }
         //if (err) { res.end('class not found/error') }
         addSessionToClass(currClass._id, classSession._id, function(err, res) {
-            _callback(err, classSession);
-        })
-        //res.cookie("session", { session: classSession }, { maxAge: TIMEOUT });
+                _callback(err, classSession);
+            })
+            //res.cookie("session", { session: classSession }, { maxAge: TIMEOUT });
     })
     counter = setInterval(secondUp, 1000)
 }
@@ -516,7 +515,7 @@ app.get('/app/:class/stop', async(req, res) => {
     const currClass = req.params.class;
     let currSession = req.cookies.session.session;
     let user = req.cookies.login.user;
-    
+
     Class.findOne({ _id: currClass })
         .exec(function(err, result) {
 
@@ -546,46 +545,34 @@ app.get('/clear/database', async(req, res) => {
 
 })
 
-app.post('/app/class/message/:type', async(req, res) => {
-    const session = req.cookies.session;
-    let u = req.cookies.login.user;
-    currSession = Session.find({ _id: session })
-    currClass = currSession.class;
-    Class.find({ classname: currClass }).exec(function(err, res) {
-        if (err) { res.send('error') } else if (res.active) {
-            const mesasgeType = req.params.type;
-            const timeStamp = getTimeStamp();
+app.get('/app/:class/message/:type', async(req, res) => {
+    const session = req.cookies.session.session;
+    let user = req.cookies.login.user;
+    let currClass = req.params.class;
+    let mesasgeType = req.params.type;
 
-            let builtMessage = decipherMessage(mesasgeType, timeStamp);
+    let builtMessage = buildMessage(mesasgeType, user.name);
+    let timeStamp = getTimeStamp();
 
-            var newMessage = new Message({
-                time: timeStamp,
-                mesasge: builtMessage,
-                student: u,
-                class: currClass
-            })
-
-            newMessage.save().exec(function(newMesssage, err) {
-                if (err) { res.end('error') }
-                Class.findOne({ name: currClass.name }).exec(function(err, results) {
-                    if (err) {
-                        res.end("error")
-                    }
-                    results.mesasges.push(newMesssage._id)
-                    results.save().then(function(err) { if (err) { res.end('error') } })
-                })
-                Student.findOne({ _id: u._id }).exec(function(err, results) {
-                    if (err) {
-                        res.end("error")
-                    }
-                    results.mesasges.push(newMesssage._id)
-                    results.save().then(function(err) { if (err) { res.end('error') } })
-                })
-                currSession.mesasges.push(newMessage._id);
-                currSession.save().then(function(err) { if (err) { res.end('error') } })
-            })
-        } else { res.end('class not active') }
+    var newMessage = new Message({
+        time: timeStamp,
+        mesasge: builtMessage,
+        student: user,
+        class: currClass
     })
+
+    if (currClass.active == true) {
+        newMessage.save();
+
+        addMessageToClass(currClass, newMessage._id, function(err, response) {
+            if (err) { res.end('FAIL'); }
+        })
+        addMessageToSession(session._id, newMessage._id, function(err, response) {
+            if (err) { res.end('FAIL'); }
+        })
+    } else {
+        res.end('class not active')
+    }
 })
 
 function addClassToStudent(classID, studentID, _callback) {
@@ -606,6 +593,22 @@ function addStudentToClass(classID, studentID, _callback) {
 
 function addSessionToClass(classID, sessionID, _callback) {
     Class.updateOne({ _id: classID }, { $push: { sessions: sessionID } },
+        function(err, response) {
+            _callback(err, response);
+        }
+    )
+}
+
+function addMessageToClass(classID, messageID, _callback) {
+    Class.updateOne({ _id: classID }, { $push: { messages: messageID } },
+        function(err, response) {
+            _callback(err, response);
+        }
+    )
+}
+
+function addMessageToSession(sessionID, messageID, _callback) {
+    Session.updateOne({ _id: sessionID }, { $push: { messages: messageID } },
         function(err, response) {
             _callback(err, response);
         }
