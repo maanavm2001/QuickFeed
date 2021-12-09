@@ -4,17 +4,18 @@ var Schema = mongoose.Schema;
 let messageSchema = new Schema({
     _id: Schema.Types.ObjectId,
     time: {
-      type: Date
+        type: String
     },
     message: {
-        type: String 
+        type: String
     },
     student: {
-        type: Schema.Types.ObjectId, ref: 'Student' 
+        type: Schema.Types.ObjectId,
+        ref: 'Student'
     },
     class: {
-        type: Schema.Types.ObjectId, ref: 'Classs' 
+        type: Schema.Types.ObjectId, ref: 'Classs'
     },
-  });
+});
 
-  module.exports = mongoose.model('Message', messageSchema);
+module.exports = mongoose.model('Message', messageSchema);
