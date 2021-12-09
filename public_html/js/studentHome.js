@@ -2,8 +2,11 @@
 var user = getUser();
 
 function getUser() {
-    let x = decodeURIComponent(document.cookie);
-    console.log(x);
+    const cookieValue = document.cookie
+    .split('; ')
+    .find(row => row.startsWith('login='))
+    .split('=')[1]
+    let x = decodeURIComponent(cookieValue);
     x = JSON.parse(x.split(':').slice(1).join(':')).user;
     return x;
 }

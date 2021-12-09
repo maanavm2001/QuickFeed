@@ -1,8 +1,13 @@
 var user = getUser();
 var course;
 
+
 function getUser() {
-    let x = decodeURIComponent(document.cookie);
+    const cookieValue = document.cookie
+    .split('; ')
+    .find(row => row.startsWith('login='))
+    .split('=')[1]
+    let x = decodeURIComponent(cookieValue);
     x = JSON.parse(x.split(':').slice(1).join(':')).user;
     return x;
 }
@@ -23,7 +28,7 @@ function showCourseDetails() {
 
 function sendMessage(messageType) {
     console.log('button pressed');
-    $.post('/app/class/message/:type'), {
+    $.get('/app/' + course._id + '/message/:type'), {
         type: messageType
     }, (data, status) => {
         console.log(data);
