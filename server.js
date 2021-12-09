@@ -154,6 +154,7 @@ function email(u, currSession) {
     emailTo = u.email;
 
     Session.findOne({ _id: currSession._id })
+        .populate("messages")
         .exec(function(err, results) {
             if (err) return handleError(err);
             body = JSON.stringify(results);

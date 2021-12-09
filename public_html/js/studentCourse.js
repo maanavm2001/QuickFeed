@@ -1,7 +1,12 @@
+// Programmer: Francisco
+// This is the client-side
+// javascript for the student course page
+// Uses jquery
+
 var user = getUser();
 var course;
 
-
+//gets user
 function getUser() {
     const cookieValue = document.cookie
     .split('; ')
@@ -12,6 +17,7 @@ function getUser() {
     return x;
 }
 
+// shows course details
 function showCourseDetails() {
     let courseDiv = document.getElementById('course-name');
     courseDiv.html = '';
@@ -42,7 +48,7 @@ function signOut() {
     })
 }
 
-
+// gets every course details
 function getCourseDetails() {
     const queryString = window.location.search;
     const params = new URLSearchParams(queryString);

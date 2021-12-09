@@ -1,3 +1,7 @@
+// Programmer: Francisco
+// This is the client-side
+// javascript for the teacher home page
+// Uses jquery
 
 var user = getUser();
 
@@ -22,6 +26,7 @@ function getTeacherCourses() {
     })
 }
 
+//all courses
 function viewCourses(courses) {
     let courseGallery = document.getElementById('course-gallery');
     courseGallery.html = '';

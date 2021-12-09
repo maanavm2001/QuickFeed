@@ -1,3 +1,8 @@
+// Programmer: Francisco
+// This is the client-side
+// javascript for the teacher add course page
+// Uses jquery
+
 var user = getUser();
 
 
@@ -11,11 +16,12 @@ function getUser() {
     return x;
 }
 
+//creates a course
 function createCourse() {
     var courseName = $('#name').val();
     var semesterName = $('#semester').val();
     var description = $('#description').val();
-    
+
     $.post('/app/teacher/class/create', {
         name: courseName,
         semester: semesterName,
@@ -25,6 +31,7 @@ function createCourse() {
     });
 }
 
+//shows links when course is created
 function showCourseLink(classID) {
     let linkSection = document.getElementById('link-section');
     let link = document.getElementById('link');

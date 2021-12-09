@@ -1,3 +1,7 @@
+// Programmer: Francisco
+// This is the client-side
+// javascript for the student home page
+// Uses jquery
 
 var user = getUser();
 
@@ -11,6 +15,7 @@ function getUser() {
     return x;
 }
 
+// gets all the courses and displays them 
 function getStudentCourses() {
     $.get('/app/student/classes/' + user._id, (data, status) => {
         if (data == 'FAIL') {

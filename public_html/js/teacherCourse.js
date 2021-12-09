@@ -1,7 +1,11 @@
+// Programmer: Francisco
+// This is the client-side
+// javascript for the teachers course page
+// Uses jquery
 var user = getUser();
 var course;
 
-
+// gets users
 function getUser() {
     const cookieValue = document.cookie
     .split('; ')
@@ -12,6 +16,7 @@ function getUser() {
     return x;
 }
 
+// gets all course details
 function getCourseDetails() {
     const queryString = window.location.search;
     const params = new URLSearchParams(queryString);
@@ -30,6 +35,7 @@ function getCourseDetails() {
     })
 }
 
+// makes the student list
 function showStudents(data) {
     let studentList = document.getElementById('student-list');
     studentList.html = '';
@@ -59,6 +65,7 @@ function setCopyButton() {
       });
 }
 
+// starts class IMPORTANT
 function startClass() {
     $.get('/app/' + course._id + '/start'), (data, status) => {
         if (data == 'FAIL') {
@@ -68,9 +75,10 @@ function startClass() {
             changeButton();
             location.reload();
         }
-    }   
+    }
 }
 
+// stops class
 function stopClass() {
     $.get('/app/' + course._id + '/stop'), (data, status) => {
         if (data == 'FAIL') {
@@ -83,6 +91,7 @@ function stopClass() {
     }
 }
 
+// makes the start button work as a stop button
 function changeButton() {
     if (course.active == true) {
         $('#on-off').css('background-color', 'red');
@@ -107,35 +116,12 @@ function buttonSetup() {
 
 function copyTextToClipboard(text) {
     var textArea = document.createElement("textarea");
-
-    /*
-    textArea.style.position = 'fixed';
-    textArea.style.top = 0;
-    textArea.style.left = 0;
-  
-    // Ensure it has a small width and height. Setting to 1px / 1em
-    // doesn't work as this gives a negative w/h on some browsers.
-    textArea.style.width = '2em';
-    textArea.style.height = '2em';
-  
-    // We don't need padding, reducing the size if it does flash render.
-    textArea.style.padding = 0;
-  
-    // Clean up any borders.
-    textArea.style.border = 'none';
-    textArea.style.outline = 'none';
-    textArea.style.boxShadow = 'none';
-  
-    // Avoid flash of the white box if rendered for any reason.
-    textArea.style.background = 'transparent';
-  
-    */
     textArea.value = text;
-  
+
     document.body.appendChild(textArea);
     textArea.focus();
     textArea.select();
-  
+
     try {
       var successful = document.execCommand('copy');
       var msg = successful ? 'successful' : 'unsuccessful';
@@ -144,6 +130,6 @@ function copyTextToClipboard(text) {
     } catch (err) {
       console.log('Oops, unable to copy');
     }
-  
+
     document.body.removeChild(textArea);
 }

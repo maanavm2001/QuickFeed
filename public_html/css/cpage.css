@@ -111,9 +111,8 @@ main h6 {
 /* General styling for the buttons */
 #switch {
   display: inline;
-  position: relative;
+  position: absolute;
   left: 80vw;
-  top: -12vh;
 }
 
 /* Copy buttons */
