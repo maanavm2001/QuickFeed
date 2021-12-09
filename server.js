@@ -122,16 +122,16 @@ function buildMessage(code, name) {
     timeStamp = getTimeStamp();
 
     if (code == 'q' || code == 'Q') {
-        finalstring += 'At ' + String(timeStamp) + +' ' + String(name) + ' found you confusing!'
+        finalstring += 'At ' + String(timeStamp) + ' ' + String(name) + ' found you confusing!'
     }
     if (code == 's' || code == 'S') {
-        finalstring += 'At ' + String(timeStamp) + +' ' + String(name) + ' found you moving slow!'
+        finalstring += 'At ' + String(timeStamp) + ' ' + String(name) + ' found you moving slow!'
     }
     if (code == 'f' || code == 'F') {
-        finalstring += 'At ' + String(timeStamp) + +' ' + String(name) + ' found you moving too fast!'
+        finalstring += 'At ' + String(timeStamp) + ' ' + String(name) + ' found you moving too fast!'
     }
     if (code == 'g' || code == 'G') {
-        finalstring += 'At ' + String(timeStamp) + +' ' + String(name) + ' thought you were explaing well!'
+        finalstring += 'At ' + String(timeStamp) + ' ' + String(name) + ' thought you were explaing well!'
     }
 
     return finalstring;
@@ -157,23 +157,24 @@ function email(u, currSession) {
         .exec(function(err, results) {
             if (err) return handleError(err);
             body = JSON.stringify(results);
+
+            var mailOptions = {
+                from: 'quickfeedteam@gmail.com',
+                to: String(emailTo),
+                subject: 'Today\'s Session Detail',
+                text: String(body)
+            };
+
+            transporter.sendMail(mailOptions, function(error, info) {
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log('Email sent: ' + info.response);
+                    currTime = 0
+                }
+            });
         })
 
-    var mailOptions = {
-        from: 'quickfeedteam@gmail.com',
-        to: String(emailTo),
-        subject: 'Today\'s Session Detail',
-        text: String(body)
-    };
-
-    transporter.sendMail(mailOptions, function(error, info) {
-        if (error) {
-            console.log(error);
-        } else {
-            console.log('Email sent: ' + info.response);
-            currTime = 0
-        }
-    });
 }
 
 function stopClassSession(user, currSession, _callback) {
@@ -555,24 +556,33 @@ app.get('/app/:class/message/:type', async(req, res) => {
     let timeStamp = getTimeStamp();
 
     var newMessage = new Message({
+        _id: new mongoose.Types.ObjectId(),
         time: timeStamp,
         mesasge: builtMessage,
         student: user,
         class: currClass
     })
 
-    if (currClass.active == true) {
-        newMessage.save();
-
-        addMessageToClass(currClass, newMessage._id, function(err, response) {
-            if (err) { res.end('FAIL'); }
+    Class.findOne({ _id: currClass })
+        .exec(function(err, result) {
+            console.log(result);
+            if (err) {
+                res.end('FAIL');
+            }
+            if (result.active == true) {
+                newMessage.save()
+                addMessageToClass(currClass, newMessage._id, function(err, response) {
+                    console.log('added to class');
+                    if (err) { res.end('FAIL'); }
+                })
+                addMessageToSession(session._id, newMessage._id, function(err, response) {
+                    console.log('added to session');
+                    if (err) { res.end('FAIL'); }
+                })
+            } else {
+                res.end('NOT ACTIVE')
+            }
         })
-        addMessageToSession(session._id, newMessage._id, function(err, response) {
-            if (err) { res.end('FAIL'); }
-        })
-    } else {
-        res.end('class not active')
-    }
 })
 
 function addClassToStudent(classID, studentID, _callback) {
