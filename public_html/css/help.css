@@ -113,7 +113,8 @@ h1{
 
 iframe{
   display: block;
-  padding-left: 27vw;
+  margin-left: auto;
+  margin-right: auto;
   padding-bottom: 5vh;
 }
 
